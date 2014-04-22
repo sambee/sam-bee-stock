@@ -1,4 +1,4 @@
-package sam.bee.stock.loader;
+package sam.bee.stock.loader.impl;
 
 import java.util.List;
 

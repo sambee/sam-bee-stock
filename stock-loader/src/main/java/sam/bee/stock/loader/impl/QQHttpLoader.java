@@ -13,7 +13,7 @@ public class QQHttpLoader extends BaseLoader{
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Object load(Object... params) throws Exception {
+	public  List<String> get(Object... params) throws Exception {
 		List<String> list =(List<String>)params[0];
 		Map root = new HashMap();
 		root.put("list", list);

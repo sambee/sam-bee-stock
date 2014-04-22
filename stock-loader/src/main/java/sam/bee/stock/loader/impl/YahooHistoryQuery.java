@@ -2,15 +2,11 @@ package sam.bee.stock.loader.impl;
 
 import java.util.List;
 
-import sam.bee.stock.loader.ICommand;
-import sam.bee.stock.loader.IDataAdapter;
-import sam.bee.stock.loader.ILoader;
-
 public class YahooHistoryQuery extends BaseQuery implements ICommand {
 
 	String code;
 	IDataAdapter adapter;
-	ILoader loader;
+	YahooHttpLoader loader;
 	
 	public YahooHistoryQuery(String code) {
 		this.code = code;
@@ -18,7 +14,7 @@ public class YahooHistoryQuery extends BaseQuery implements ICommand {
 		this.loader = new YahooHttpLoader();
 	}
 	
-	public YahooHistoryQuery(ILoader loader, String code, IDataAdapter adapter) {
+	public YahooHistoryQuery(YahooHttpLoader loader, String code, IDataAdapter adapter) {
 		this.code = code;
 		this.adapter =  adapter;
 		this.loader = loader;
@@ -27,7 +23,7 @@ public class YahooHistoryQuery extends BaseQuery implements ICommand {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute() throws Exception {		
-		List<String> list = (List<String>)loader.load(code);		
+		List<String> list = (List<String>)loader.get(code);		
 		return adapter.parse(list);
 	}
 }

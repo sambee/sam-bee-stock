@@ -1,19 +1,15 @@
 package sam.bee.stock.loader.impl;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
-public class QQHttpLoaderTest {
 
+public class QQRealTimeDataApapterTest {
 
-	/**
-	 * 
-	 * @throws Exception
-	 */
 	@Test
 	public void test() throws Exception {
 		
@@ -26,11 +22,13 @@ public class QQHttpLoaderTest {
 		list.add(code2);
 		List<String> actual = loader.get(list);
 		
-		System.out.println(actual.get(0));
-		System.out.println(actual.get(1));
+		QQRealTimeDataApapter adapter = new QQRealTimeDataApapter();
+		List<Map<String, String>> realInfo =adapter.parse(actual);
 		
-		assertThat(actual.get(0), containsString(code1));
-		assertThat(actual.get(1), containsString(code2));
+		System.out.println(realInfo);
+	}
+	
+	protected void createDatabase() throws ClassNotFoundException{
 		
 	}
 

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sam.bee.stock.loader.IDataAdapter;
-
 public class QQRealTimeDataApapter implements IDataAdapter{
 
 //	private static final String[] FIELDS = {
@@ -58,9 +56,9 @@ public class QQRealTimeDataApapter implements IDataAdapter{
 	"涨跌%",	//	32: 涨跌%
 	"最高",	//	33: 最高
 	"最低",	//	34: 最低
-	"价格/成交量（手）/成交额",	//	35: 价格/成交量（手）/成交额
-	"成交量（手）",	//	36: 成交量（手）
-	"成交额（万）",	//	37: 成交额（万）
+	"成交量",	//	35: 价格/成交量（手）/成交额
+	"成交量",	//	36: 成交量（手）
+	"成交额",	//	37: 成交额（万）
 	"换手率",	//	38: 换手率
 	"市盈率",	//	39: 市盈率
 	"最高",	//	40: 
@@ -75,7 +73,7 @@ public class QQRealTimeDataApapter implements IDataAdapter{
 	};
 	
 	@Override
-	public Object parse(List<?> list) {
+	public List<Map<String, String>> parse(List<?> list) {
 		
 		List<Map<String, String>> ret = new ArrayList<Map<String,String>>();
 		Map<String, String> map ;

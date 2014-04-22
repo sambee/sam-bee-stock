@@ -32,8 +32,10 @@ public class QTingRealTimQueryTest {
 	public void tearDown() throws Exception {
 	}
 
-	
-	@SuppressWarnings("unchecked")
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void test() throws Exception {
 		

@@ -2,16 +2,12 @@ package sam.bee.stock.loader.impl;
 
 import java.util.List;
 
-import sam.bee.stock.loader.ICommand;
-import sam.bee.stock.loader.IDataAdapter;
-import sam.bee.stock.loader.ILoader;
-
 public class QQRealTimQuery extends BaseQuery implements ICommand{
 
 
 	private List<String> stockCodeList;
 	private IDataAdapter adapter;
-	ILoader loader;
+	QQHttpLoader loader;
 	
 	public QQRealTimQuery(List<String> stockCodeList)
 	{
@@ -20,7 +16,7 @@ public class QQRealTimQuery extends BaseQuery implements ICommand{
 		this.loader = new QQHttpLoader();
 	}
 	
-	public QQRealTimQuery(ILoader loader, List<String> stockCodeList, IDataAdapter adapter)
+	public QQRealTimQuery(QQHttpLoader loader, List<String> stockCodeList, IDataAdapter adapter)
 	{
 		this.stockCodeList = stockCodeList;
 		this.adapter =  adapter;
@@ -31,7 +27,7 @@ public class QQRealTimQuery extends BaseQuery implements ICommand{
 	@SuppressWarnings("unchecked")
 	public Object execute() throws Exception
 	{
-		List<String> list = (List<String>)loader.load(stockCodeList);		
+		List<String> list = loader.get(stockCodeList);		
 		return adapter.parse(list);
 	}
 	

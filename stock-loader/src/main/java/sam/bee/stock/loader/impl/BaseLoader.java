@@ -9,9 +9,9 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import sam.bee.stock.loader.ILoader;
-
-public abstract class BaseLoader implements ILoader{
+public abstract class BaseLoader {
+	
+	protected abstract List<String> get(Object... params) throws Exception; 
 	
 	protected List<String> getResponse(String request) throws IOException {
 		URL url = new URL(request);
