@@ -29,8 +29,8 @@ public class GetAllShangHaiStockList {
 			if(line!=null && line.length()>0){
 				String[] str =line.split(" ");
 				map = new HashMap();
-				map.put("STOCKCODE", str[0].trim());
-				map.put("STOCKNAME", str[1].trim());
+				map.put("STOCK_NAME", str[0].trim());
+				map.put("STOCK_CODE", str[1].trim());
 				list.add(map);
 			}
 		}

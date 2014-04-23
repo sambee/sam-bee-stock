@@ -7,6 +7,8 @@ public interface ILoaderAPI {
 
 	/**
 	 * 
+	 * get all stock code and stock names.
+	 * 
 	 * @return
 	 */
 	List<Map<String, Object>> getAllStockList();

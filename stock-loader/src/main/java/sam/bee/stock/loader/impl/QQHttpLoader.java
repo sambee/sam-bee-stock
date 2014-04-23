@@ -6,6 +6,18 @@ import java.util.Map;
 
 import sam.bee.stock.loader.util.FreeMarkerUtils;
 
+/**
+ * 获取最新行情，访问数据接口
+ *
+ * QQHttpLoader.java
+ *
+ * @author Sam Wong
+ *  QQ: 1557299538
+ * @create: 2014年4月23日  
+ * 
+ * Modification
+ * -------------------------------------------
+ */
 public class QQHttpLoader extends BaseLoader{
 
 	//private final static String URL_TEMPLATE = "http://qt.gtimg.cn/r=0.7938921226847172q=<#list list as l><#if l?starts_with(\"0\") >s_sz${l}<#else>s_sh${l}</#if></#list>";
