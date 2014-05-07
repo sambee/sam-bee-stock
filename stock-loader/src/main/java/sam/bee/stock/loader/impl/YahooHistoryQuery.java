@@ -6,15 +6,15 @@ public class YahooHistoryQuery extends BaseQuery implements ICommand {
 
 	String code;
 	IDataAdapter adapter;
-	YahooHttpLoader loader;
+	YahooHistoryLoader loader;
 	
 	public YahooHistoryQuery(String code) {
 		this.code = code;
 		this.adapter =  new YahooHistoryDataAdapter();
-		this.loader = new YahooHttpLoader();
+		this.loader = new YahooHistoryLoader();
 	}
 	
-	public YahooHistoryQuery(YahooHttpLoader loader, String code, IDataAdapter adapter) {
+	public YahooHistoryQuery(YahooHistoryLoader loader, String code, IDataAdapter adapter) {
 		this.code = code;
 		this.adapter =  adapter;
 		this.loader = loader;

@@ -68,6 +68,14 @@ public class AccessDatabase {
 		tableBuilder.toTable(accessDB);
 	}
 
+	public void emptyTable(String tableName) throws IOException{
+		log.info("Empty table:" + tableName);
+		Table tb = accessDB.getTable(tableName);
+		while(tb.getRowCount()>0){
+			tb.deleteRow(tb.getNextRow());
+		}
+	}
+	
 	public int getType(String type) {
 		if ("varchar".equals(type)) {
 			return Types.LONGVARCHAR;

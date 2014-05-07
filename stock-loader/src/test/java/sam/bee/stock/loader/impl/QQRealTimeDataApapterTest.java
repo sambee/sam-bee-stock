@@ -23,7 +23,7 @@ public class QQRealTimeDataApapterTest {
 		List<String> actual = loader.get(list);
 		
 		QQRealTimeDataApapter adapter = new QQRealTimeDataApapter();
-		List<Map<String, String>> realInfo =adapter.parse(actual);
+		List<Map<String, Object>> realInfo =adapter.parse(actual);
 		
 		System.out.println(realInfo);
 	}
