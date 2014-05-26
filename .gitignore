@@ -1,0 +1,7 @@
+.settings
+*.classpath
+*.project
+target
+/stock-loader/*.mdb
+/stock-loader/*.ldb
+/stock-loader/*.log
