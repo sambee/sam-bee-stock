@@ -1,0 +1,117 @@
+// Decompiled by DJ v3.7.7.81 Copyright 2004 Atanas Neshkov  Date: 2007-6-14 15:27:11
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   AboutDialog.java
+
+package gnnt.MEBS.HQApplet;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.TextArea;
+import java.awt.TextComponent;
+import java.awt.Window;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Vector;
+
+// Referenced classes of package gnnt.MEBS.HQApplet:
+//            HQApplet
+
+class AboutDialog extends Dialog
+{
+
+    public AboutDialog(Frame f, HQApplet applet)
+    {
+        super(f, applet.getShowString("About"), true);
+        vString = new Vector();
+        m_list = new java.awt.List();
+        m_text = new TextArea("", 2, 2, 3);
+        m_applet = applet;
+        try
+        {
+            jbInit();
+        }
+        catch(Exception e)
+        {
+            if(HQApplet.bDebug != 0)
+                e.printStackTrace();
+        }
+    }
+
+    private void jbInit()
+        throws Exception
+    {
+        m_list.setForeground(Color.blue);
+        m_list.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e)
+            {
+                m_list_mouseClicked(e);
+            }
+
+        });
+        m_list.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent keyevent)
+            {
+            }
+
+        });
+        addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent e)
+            {
+                this_windowClosing(e);
+            }
+
+        });
+        addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent keyevent)
+            {
+            }
+
+        });
+        m_text.setBackground(Color.white);
+        m_text.setForeground(Color.blue);
+        m_text.setEditable(false);
+        m_text.append(m_applet.getShowString("AppletName"));
+        m_text.append("\n" + m_applet.getShowString("Version") + " " + "1.2.22");
+        m_text.append("\n\n" + m_applet.getShowString("Company") + " (C) Copyright 2005~2006");
+        add(m_text);
+        setResizable(false);
+    }
+
+    void this_windowClosing(WindowEvent e)
+    {
+        hide();
+    }
+
+    void m_list_mouseClicked(MouseEvent e)
+    {
+        if(e.getModifiers() != 4 && e.getClickCount() > 1)
+        {
+            strCmd = "";
+            int iSel = m_list.getSelectedIndex();
+            if(iSel >= 0 && iSel < vString.size())
+                strCmd = (String)vString.elementAt(iSel);
+            hide();
+        }
+    }
+
+    public static final String VER = "1.2.22";
+    private static final long serialVersionUID = 0x6d97c7b19fc60a97L;
+    private Vector vString;
+    public String strCmd;
+    private java.awt.List m_list;
+    private TextArea m_text;
+    private HQApplet m_applet;
+}
