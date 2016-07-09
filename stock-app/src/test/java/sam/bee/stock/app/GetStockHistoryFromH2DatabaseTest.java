@@ -8,8 +8,8 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.junit.Test;
 
-import sam.bee.cache.H2DatabaseCache;
-import sam.bee.cache.JsonHelper;
+import sam.bee.porvider.H2DatabaseCache;
+import sam.bee.porvider.JsonHelper;
 import sam.bee.stock.loader.impl.YahooHistoryQuery;
 
 public class GetStockHistoryFromH2DatabaseTest {

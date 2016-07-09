@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import sam.bee.cache.H2DatabaseCache;
+import sam.bee.porvider.H2DatabaseCache;
 import sam.bee.stock.gui.Application;
 import sam.bee.stock.gui.CodeTable;
 import sam.bee.stock.gui.Common;

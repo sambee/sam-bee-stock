@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import sam.bee.cache.H2DatabaseCache;
+import sam.bee.porvider.H2DatabaseCache;
 import sam.bee.stock.loader.impl.GetAllShangHaiStockList;
 import sam.bee.stock.loader.impl.GetAllShendZhenStockList;
 

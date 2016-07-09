@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import sam.bee.cache.H2DatabaseCache;
+import sam.bee.porvider.H2DatabaseCache;
 import sam.bee.stock.vo.ProductInfoVO;
 
 // Referenced classes of package gnnt.util.service.HQVO:

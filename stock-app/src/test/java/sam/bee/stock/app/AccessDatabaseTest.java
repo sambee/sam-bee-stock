@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import sam.bee.cache.AccessDatabaseCache;
+import sam.bee.porvider.AccessDatabaseCache;
 import sam.bee.stock.loader.impl.GetAllShangHaiStockList;
 import sam.bee.stock.loader.impl.GetAllShendZhenStockList;
 import sam.bee.stock.loader.impl.QQHttpLoader;

@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import sam.bee.cache.H2DatabaseCache;
+import sam.bee.porvider.H2DatabaseCache;
 import sam.bee.stock.service.HQServiceUtil;
 import sam.bee.stock.vo.ProductDataVO;
 

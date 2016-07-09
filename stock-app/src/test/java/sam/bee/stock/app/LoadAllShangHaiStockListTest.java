@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sam.bee.cache.AccessDatabaseCache;
+import sam.bee.porvider.AccessDatabaseCache;
 import sam.bee.stock.loader.impl.GetAllShangHaiStockList;
 
 public class LoadAllShangHaiStockListTest {
