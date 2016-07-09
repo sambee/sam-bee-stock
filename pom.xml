@@ -26,7 +26,7 @@
   <!-- maven将当前项目所有依赖的jar文件提取到指定文件夹，可以利用maven-dependency-plugin实现 -->
   <modules>
   	<module>stock-loader</module>
-    <module>stock-search</module>
+    <!--<module>stock-search</module>-->
     <!-- module>sam-cache</module -->
     <!-- module>stock-app</module -->
   </modules>

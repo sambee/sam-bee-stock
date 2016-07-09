@@ -1,4 +1,4 @@
-package com.sam.stock.trade;
+package sam.bee.stock.trade;
 
 public class BuyStockOrder implements Order {
 

@@ -1,4 +1,4 @@
-package sam.bee.cache;
+package sam.bee.porvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -18,7 +18,7 @@ import org.json.JSONArray;
 
 
 
-public class FileCache extends AbstractCache{
+public class FileDataProvider extends BasicDataProvider {
 
 	File base = null;
 	long keep = -1L;
@@ -28,14 +28,14 @@ public class FileCache extends AbstractCache{
 	 * @param fileSpace
 	 * @param keep -1 keep it forever
 	 */
-	public FileCache(String fileSpace, long keep){
+	public FileDataProvider(String fileSpace, long keep){
 		base = new File(fileSpace);
 		this.keep = keep;
 	}
 
 
-	public void set(String value, String... keys) throws IOException  {		
-		set(value.getBytes(), keys);		
+	public void set(String key, String... keys) throws IOException  {
+		set(key.getBytes(), keys);
 	};
 	
 	

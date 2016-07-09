@@ -28,7 +28,13 @@ public interface ILoaderAPI {
 	 * @throws Exception
 	 */
 	List<Map<String, String>> getRealTimeStockList(List<String> stocks) throws Exception;
-	
-	
+
+
+	/**
+	 *
+	 * @param stockCode
+	 * @return
+	 * @throws Exception
+     */
 	List<Map<String, String>> getStockHistory(String stockCode) throws Exception;
 }

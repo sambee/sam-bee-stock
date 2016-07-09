@@ -2,7 +2,6 @@ package sam.bee.stock.loader.impl;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -12,15 +11,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import sam.bee.porvider.MemoryDataProvider;
 import sam.bee.stock.loader.BaseTest;
 import sam.bee.stock.loader.ILoaderAPI;
-import sam.bee.cache.FileCache;
-import sam.bee.cache.ICache;
-import java.util.concurrent.CountDownLatch;
+import sam.bee.porvider.FileDataProvider;
+import sam.bee.porvider.IProvider;
+
 public class GetStockHistoryTest extends BaseTest{
 
 	
-	final ICache cache = new FileCache("../stocks",1800000);
+	final IProvider cache = new MemoryDataProvider();
 	final String HISTORY = "history";
 	final String EXCLUDE = "exclude";
 	final String CODE = "code";
@@ -87,11 +87,11 @@ public class GetStockHistoryTest extends BaseTest{
 	class Task implements Runnable{
 		
 		String stockCode;
-		ICache cache;
+		IProvider cache;
 		ILoaderAPI api;
 		String name;
 		
-		public Task(String stockCode, String name, ICache cache, ILoaderAPI api){
+		public Task(String stockCode, String name, IProvider cache, ILoaderAPI api){
 			this.stockCode = stockCode;
 			this.cache = cache;
 			this.api = api;	

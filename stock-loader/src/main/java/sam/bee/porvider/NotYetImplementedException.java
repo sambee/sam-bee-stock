@@ -1,6 +1,6 @@
-package sam.bee.cache;
+package sam.bee.porvider;
 
-public class NotImplementedException extends RuntimeException {
+public class NotYetImplementedException extends RuntimeException {
 
 	/**
 	 * 
@@ -11,7 +11,7 @@ public class NotImplementedException extends RuntimeException {
 	 * @param args
 	 */
 	@SuppressWarnings("rawtypes")
-	public NotImplementedException(java.lang.Class clazz) {
+	public NotYetImplementedException(java.lang.Class clazz) {
 		super(clazz.getName() + " not yet implemented.");
 
 	}

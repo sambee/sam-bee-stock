@@ -1,38 +1,38 @@
-package sam.bee.cache;
+package sam.bee.porvider;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 
-public class AbstractCache  implements ICache{
+public class BasicDataProvider implements IProvider {
 	
 	/**
 	 * 
 	 */
 	public void set(List<Map<String, String>> values, String... keys)throws Exception{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	};
 
 	/**
 	 * 
 	 */
 	public void set(String value, String... key) throws Exception{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/*
 	 * 
 	 */
 	public void set(byte[] bytes, String... key) throws Exception{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/**
 	 * 
 	 */
 	public String getString(String... key) throws Exception{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class AbstractCache  implements ICache{
 	 * @throws IOException
 	 */
 	public byte[] getBin(String... key) throws IOException{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class AbstractCache  implements ICache{
 	 * @return
 	 */
 	public boolean cleanAllCache(){
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/**
@@ -58,14 +58,14 @@ public class AbstractCache  implements ICache{
 	 * 
 	 */
 	public boolean cleanCache(String... key) throws Exception{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/**
 	 * 
 	 */
 	public List<Map<String, String>> getList(String... key) throws Exception{
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class AbstractCache  implements ICache{
 	 */
 	@Override
 	public boolean exist(String... key) {
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public class AbstractCache  implements ICache{
 	 */
 	@Override
 	public boolean existIgnoreTime(String... key) {
-		throw new NotImplementedException(this.getClass());
+		throw new NotYetImplementedException(this.getClass());
 	}
 	
 }

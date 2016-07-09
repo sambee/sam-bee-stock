@@ -1,11 +1,11 @@
-package sam.bee.cache;
+package sam.bee.porvider;
 
 import java.util.List;
 import java.util.Map;
 
 
 
-public interface ICache {
+public interface IProvider {
 
 	/**
 	 * 将值放到指定的目录下

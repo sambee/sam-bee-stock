@@ -1,4 +1,4 @@
-package com.sam.stock.trade;
+package sam.bee.stock.trade;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -7,15 +7,15 @@ public class BuyerAndSellerTest {
 
     public static void main(String[] args) throws InterruptedException {
     	
-    	/** ÐéÄâ½»Ò×Ëù */
+    	/** ï¿½ï¿½ï¿½â½»ï¿½ï¿½ï¿½ï¿½ */
         MyAgent agent = new MyAgent();
    
        int pThreadSize = 5;
        ExecutorService pool = Executors.newFixedThreadPool(pThreadSize);
        
        for(int i=0;i<pThreadSize;i++){           
-           pool.execute(new Buy(agent, "Âò¼Ò" + i));
-           pool.execute(new Sell(agent, "Âô¼Ò" +i));           
+           pool.execute(new Buy(agent, "ï¿½ï¿½ï¿½" + i));
+           pool.execute(new Sell(agent, "ï¿½ï¿½ï¿½ï¿½" +i));           
      
        }
 
@@ -52,7 +52,7 @@ class MyAgent {
      
     boolean isClosed = false;
     
-    /** ÂòÍê¼´Ö¹ */
+    /** ï¿½ï¿½ï¿½ê¼´Ö¹ */
     public void close(){ 
     	isClosed = true;
     	synchronized (this){
@@ -63,14 +63,14 @@ class MyAgent {
     
    
     public synchronized void sell(MyOrder order) {
-        System.out.println(" ++ ³öÊÛ¹ÉÆ±Ç° Index£º" + index);
+        System.out.println(" ++ ï¿½ï¿½ï¿½Û¹ï¿½Æ±Ç° Indexï¿½ï¿½" + index);
 
         while(index >= orders.length) {
         	if(isClosed){
-        		System.out.println("¡¾½»Ò×Ëù½»Ò×Ê±¼äÒÑ¹Ø±Õ£¬ÎÞ·¨½øÐÐ½»Ò×£¬´Ë¶©µ¥×÷·Ï¡¿:" + order);
+        		System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ñ¹Ø±Õ£ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½×£ï¿½ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¡ï¿½:" + order);
         		return;
         	}
-            System.out.println(" >>>>>> ÐèÒª³öÊÛµÄ¹ÉÆ±Ì«¶àÁË:(£¬ÔÝÍ£´¦Àí£¡");
+            System.out.println(" >>>>>> ï¿½ï¿½Òªï¿½ï¿½ï¿½ÛµÄ¹ï¿½Æ±Ì«ï¿½ï¿½ï¿½ï¿½:(ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½");
             try {
             	this.wait();
             } catch(InterruptedException e) {
@@ -79,20 +79,20 @@ class MyAgent {
         }
        
         orders[index] = order;
-       // System.out.println("³öÊÛ¹ÉÆ±£º" + order);        
+       // System.out.println("ï¿½ï¿½ï¿½Û¹ï¿½Æ±ï¿½ï¿½" + order);        
         index++;
         notifyAll();
     }
      
     public synchronized MyOrder buy() {
-       // System.out.println(" -- ¹ºÂòÇ°¹ÉÆ±ÊýÎª£º" + index );
+       // System.out.println(" -- ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½Æ±ï¿½ï¿½Îªï¿½ï¿½" + index );
 
         while(index <= 0) {
         	if(isClosed){
-        		System.out.println("¡¾½»Ò×Ëù½»Ò×Ê±¼äÒÑ¹Ø±Õ£¬ÎÞ·¨½øÐÐ½»Ò×£¬ÎÞ·¨¹ºÂò¡¿");
+        		System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ñ¹Ø±Õ£ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½×£ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½");
         		return null;
         	}
-            System.out.println("  >>>>>> ÒÑÃ»ÓÐ¹ÉÆ±¿ÉÒÔÂôÁË-_-!!£¬ÔÝÍ£¹ºÂò£¡");
+            System.out.println("  >>>>>> ï¿½ï¿½Ã»ï¿½Ð¹ï¿½Æ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-_-!!ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½");
             try {
                 this.wait();
             } catch(InterruptedException e) {
@@ -101,7 +101,7 @@ class MyAgent {
         } 
 
         index--;
-        //System.out.println("¹ºÂò¹ÉÆ±£º" + orders[index]);
+        //System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½Æ±ï¿½ï¿½" + orders[index]);
         notifyAll();
         return orders[index];
     }
@@ -137,9 +137,9 @@ class Sell implements Runnable {
      
     public void run() {
         for(int i=0; i<100; i++) {
-        	MyOrder order = new MyOrder("µÚ" + i + "Ö»¹ÉÆ±");
+        	MyOrder order = new MyOrder("ï¿½ï¿½" + i + "Ö»ï¿½ï¿½Æ±");
         	agent.sell(order);
-            //System.out.println("[Sell]£º " + order);
+            //System.out.println("[Sell]ï¿½ï¿½ " + order);
             try {
                 Thread.sleep(100);
             } catch(InterruptedException e) {
@@ -160,7 +160,7 @@ class Buy implements Runnable {
      
     public void run() {
         for(int i=0; i<100; i++) {
-            System.out.println(name + "¹ºÂòÁË:" +agent.buy());
+            System.out.println(name + "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" +agent.buy());
             try {
                 Thread.sleep(100);
             } catch(InterruptedException e) {
