@@ -21,16 +21,14 @@ import org.json.JSONArray;
 public class FileDataProvider extends BasicDataProvider {
 
 	File base = null;
-	long keep = -1L;
 	
 	/**
 	 * 
 	 * @param fileSpace
-	 * @param keep -1 keep it forever
 	 */
-	public FileDataProvider(String fileSpace, long keep){
+	public FileDataProvider(String fileSpace){
 		base = new File(fileSpace);
-		this.keep = keep;
+
 	}
 
 
@@ -58,9 +56,6 @@ public class FileDataProvider extends BasicDataProvider {
 		if(!f.exists()){			
 			return null;
 		}
-		if(keep!=-1 && System.currentTimeMillis()-f.lastModified()>keep){
-			return null;
-		}
 		return readFile(f,"UTF-8");
 	};
 	
@@ -68,9 +63,6 @@ public class FileDataProvider extends BasicDataProvider {
 	public  byte[] getBin(String... key) throws IOException{
 		File f = new File(base, join(File.separator, key));
 		if(!f.exists()){
-			return null;
-		}
-		if(System.currentTimeMillis()-f.lastModified()>keep){
 			return null;
 		}
 		return readFile(f);
@@ -88,7 +80,7 @@ public class FileDataProvider extends BasicDataProvider {
 	}
 	
 	@Override
-	public boolean cleanAllCache(){
+	public void cleanAllCache(){
 //		deleteRecursive(base);
 //		return true;
 		throw new RuntimeException("Not supported yet.");
@@ -179,20 +171,10 @@ public class FileDataProvider extends BasicDataProvider {
 	@Override
 	public boolean exist(String... key) {		
 		File file = new File(base, join(File.separator, key));
-		boolean exist = existIgnoreTime(key);
-		if(exist){
-			if(keep!=-1 && System.currentTimeMillis()-file.lastModified()>keep){
-				exist = false;
-			}
-		}
-		return exist;
+
+		return file.exists();
 	}
 
-
-	@Override
-	public boolean existIgnoreTime(String... key) {
-		return new File(base, join(File.separator, key)).exists();
-	}
 
 	public String getBasicCacheFilePath(){
 		return base.getAbsolutePath();

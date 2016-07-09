@@ -16,27 +16,27 @@ public class GetStockNameAndFileCacheTest extends BaseTest{
 
 	@Test
 	public void test() throws Exception {
-		log.info(":::::::::: GetStockNameAndFileCacheTest");
+		logger.info(":::::::::: GetStockNameAndFileCacheTest");
 		ILoaderAPI api = new LoaderApiImpl();
 		
 
-		IProvider cache = new FileDataProvider("build/stocks/realtime",1800000);
-		
-		log.info("Get shang hai stock list.");
+		IProvider cache = new FileDataProvider("build/stocks/realtime");
+
+		logger.info("Get shang hai stock list.");
 		List<Map<String,String>> list =  api.getShangHaiStockList();
 		cache.set(list, "shuanghai");
 
 		List<Map<String,String>> actual = cache.getList("shuanghai");
 		validate(list, actual);
-		
-		log.info("Get sheng zhen stock list.");
+
+		logger.info("Get sheng zhen stock list.");
 		list =  api.getShenZhenStockList();
 		cache.set(list, "shengzhen");
 		
 		actual = cache.getList("shengzhen");
 		validate(list, actual);
-		
-		log.info("------------- DONE ---------");
+
+		logger.info("------------- DONE ---------");
 	}
 	
 	void validate(List<Map<String,String>> expected, List<Map<String,String>> actual){

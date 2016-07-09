@@ -17,11 +17,11 @@ public interface IProvider {
 	
 	/**
 	 * 
-	 * @param value
+	 * @param data
 	 * @param key
 	 * @throws Exception
 	 */
-	void set(List<Map<String,String>> value, String... key) throws Exception;
+	void set(List<Map<String,String>> data, String... key) throws Exception;
 	
 	/*
 	 * 
@@ -44,13 +44,7 @@ public interface IProvider {
 	 */
 	boolean exist(String... key);
 	
-	/**
-	 * 
-	 * @param key
-	 * @return
-	 */
-	boolean existIgnoreTime(String... key);
-	
+
 	/**
 	 * 
 	 * @param key

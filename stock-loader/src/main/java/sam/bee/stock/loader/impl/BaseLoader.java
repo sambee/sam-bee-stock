@@ -14,19 +14,40 @@ public abstract class BaseLoader {
 	protected abstract List<String> get(Object... params) throws Exception; 
 	
 	protected List<String> getResponse(String request) throws IOException {
+		HttpURLConnection conn = null;
+		InputStream in = null;
+		BufferedReader br = null;
 		URL url = new URL(request);
-		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		conn.setConnectTimeout(120000);		
-		InputStream in = conn.getInputStream();
-		BufferedReader br = new BufferedReader(new InputStreamReader(in,"GBK"));
-		String tmp = null;
 		List<String> list = new ArrayList<String>(0);
-		while (null != (tmp = br.readLine()))
-		{		
-			list.add(tmp);
+		try {
+			conn =(HttpURLConnection) url.openConnection();
+			conn.setConnectTimeout(120000);
+			in = conn.getInputStream();
+			br = new BufferedReader(new InputStreamReader(in, "GBK"));
+			String tmp = null;
+
+			while (null != (tmp = br.readLine())) {
+				list.add(tmp);
+			}
+
 		}
-		br.close();
-		in.close();
+		finally {
+			if(br!=null) {
+				try {
+					br.close();
+				}catch (Exception e){}
+			}
+			if(in!=null){
+				try{
+					in.close();
+				}catch (Exception e){}
+			}
+			if(conn!=null){
+				try{
+					conn.getInputStream().close();
+				}catch (Exception e){}
+			}
+		}
 		return list;
 	}
 }

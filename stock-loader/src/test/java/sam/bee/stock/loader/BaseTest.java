@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class BaseTest {
 
-	protected static final Logger log = LoggerFactory.getLogger(BaseTest.class);
+	protected static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
 //	@BeforeClass
 //	public static void setUpBeforeClass() throws Exception {

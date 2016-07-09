@@ -2,10 +2,12 @@ package sam.bee.stock.loader.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sam.bee.stock.loader.util.FreeMarkerUtils;
 
 public class YahooHistoryLoader extends BaseLoader{
-
+	protected static final Logger logger = LoggerFactory.getLogger(YahooHistoryLoader.class);
 	//http://ichart.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2014&g=d
 	//•http://ichart.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d
 	//•http://table.finance.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d
@@ -36,6 +38,7 @@ public class YahooHistoryLoader extends BaseLoader{
 	@Override
 	protected List<String> get(Object... params) throws Exception {
 		String url = FreeMarkerUtils.convert(URL, "code", (String)params[0]);
+		logger.info(url);
 		return getResponse(url);
 	}
 

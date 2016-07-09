@@ -1,9 +1,6 @@
 package sam.bee.stock.loader.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -11,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import sam.bee.porvider.MemoryDataProvider;
 import sam.bee.stock.loader.BaseTest;
 import sam.bee.stock.loader.ILoaderAPI;
 import sam.bee.porvider.FileDataProvider;
@@ -20,12 +16,15 @@ import sam.bee.porvider.IProvider;
 public class GetStockHistoryTest extends BaseTest{
 
 	
-	final IProvider cache = new MemoryDataProvider();
+	final IProvider provider = new FileDataProvider(System.getProperty("user.home") + "/.stocks");
 	final String HISTORY = "history";
 	final String EXCLUDE = "exclude";
 	final String CODE = "code";
+
+
 	@Test
 	public void test() throws Exception {
+		logger.info("==== test get story history ====");
 		//CountDownLatch doneSignal = new CountDownLatch(100);
 		
 
@@ -34,67 +33,74 @@ public class GetStockHistoryTest extends BaseTest{
 		ExecutorService executorService =Executors.newFixedThreadPool(cpuNums * POOL_SIZE);
 		
 		
-		ILoaderAPI api = new LoaderApiImpl();
-		List<Map<String,String>> stockList = cache.getList(CODE, "shanghai");
+		ILoaderAPI loader = new LoaderApiImpl();
+		List<Map<String,String>> stockList = provider.getList(CODE, "shanghai");
 		if(stockList==null){
-			stockList =  api.getShangHaiStockList();
-			cache.set(stockList, CODE,"shanghai");
+			stockList =  loader.getShangHaiStockList();
+			provider.set(stockList, CODE,"shanghai");
 		}
-		
-		//test shuanghai
+
+		List<Task> tasks = new ArrayList<Task>();
+		//load shuanghai stock history data.
 		for(Map<String,String> m : stockList){
 			String stockCode = m.get("STOCK_CODE");
 			String stockName = m.get("STOCK_NAME");
-			if(!cache.exist(HISTORY, stockCode) && !cache.existIgnoreTime(EXCLUDE, stockCode)){				
-				executorService.execute(new Task(stockCode,stockName,  cache,api));
-				
-			}
-			else{
-				log.info("Shang Hai Ignore stock:" +  stockCode + " "+  stockName);
-			}
-			
+			tasks.add(new Task(stockCode,stockName, provider,loader));
 		}
 		
-		//test shengzhen
-		stockList = cache.getList(CODE, "shengzhen");
+
+		stockList = provider.getList(CODE, "shengzhen");
 		if(stockList==null){
-			stockList =  api.getShenZhenStockList();
-			cache.set(stockList, CODE,"shengzhen");
+			stockList =  loader.getShenZhenStockList();
+			provider.set(stockList, CODE,"shengzhen");
 		}
-		
+
+		//load shengzhen  stock history data.
 		for(Map<String,String> m : stockList){
 			String stockCode = m.get("STOCK_CODE");
 			String stockName = m.get("STOCK_NAME");
-			if(!cache.exist(HISTORY, stockCode) && !cache.existIgnoreTime(EXCLUDE, stockCode)){				
-				executorService.execute(new Task(stockCode,stockName, cache,api));
-				
+			tasks.add(new Task(stockCode,stockName, provider,loader));
+		}
+
+
+		for(Task t : tasks){
+
+			String code = t.code;
+			String name = t.name;
+			if(!provider.exist(HISTORY,  getName(code, name) ) &&  !provider.exist(EXCLUDE, getName(code,name))){
+				logger.info("load task:" + getName(code, name));
+				executorService.execute(t);
+
 			}
 			else{
-				log.info("Ignore stock:" +  stockCode + " "+  stockName);
+				logger.info("Ignore stock:" +  getName(code, name));
 			}
 		}
 		
 		executorService.shutdown();
+
 		while(!executorService.awaitTermination(1, TimeUnit.SECONDS)){
-			System.out.println("----------- Wait ---------" +  ((ThreadPoolExecutor)executorService).getCompletedTaskCount());
+			logger.info(  "Load stock history done:" +  ((ThreadPoolExecutor)executorService).getCompletedTaskCount() + "/"  + ((ThreadPoolExecutor)executorService).getTaskCount());
 		}
 
 		
-		System.out.println("----------- Done ---------2");
+		logger.info("----------- Done ---------2");
 		
 	}
 	
 	class Task implements Runnable{
-		
-		String stockCode;
+
+		public String code;
 		IProvider cache;
-		ILoaderAPI api;
-		String name;
-		
-		public Task(String stockCode, String name, IProvider cache, ILoaderAPI api){
-			this.stockCode = stockCode;
+		ILoaderAPI loader;
+		public String name;
+
+
+
+		public Task(String code, String name, IProvider cache, ILoaderAPI loader){
+			this.code = code;
 			this.cache = cache;
-			this.api = api;	
+			this.loader = loader;
 			this.name = name;
 			
 		}
@@ -104,7 +110,7 @@ public class GetStockHistoryTest extends BaseTest{
 			List<Map<String, String>> list;
 			try {
 				//log.info("Load stock:" +  stockCode);
-				list = (List<Map<String,String>>)api.getStockHistory(stockCode);
+				list = (List<Map<String,String>>)loader.getStockHistory(code);
 				Collections.sort(list, new  Comparator<Map<String,String>>(){
 
 					@Override
@@ -115,23 +121,28 @@ public class GetStockHistoryTest extends BaseTest{
 					}
 					
 				});
-				log.info("Loaded:" + stockCode + " " +name);
-				cache.set(list, HISTORY, stockCode);
+				logger.info("Loaded:" + getName(code, name));
+				cache.set(list, HISTORY,  getName(code, name));
 
-				
 				
 			} catch (Exception e) {	
 				try {
-					cache.set(e.getMessage(), EXCLUDE, stockCode);
+					cache.set(e.getMessage(), EXCLUDE, getName(code,name));
 				} catch (Exception e1) {
-					log.error("",e);
+					logger.error("",e);
 				}
-				log.error("",e);
+				logger.error("",e);
 			}
 			
 			
 		}
 		
 	}
+
+	private String getName(String code, String name){
+		return (code+"-" + name ).replaceAll("\\*", "");
+	}
+
+
 
 }

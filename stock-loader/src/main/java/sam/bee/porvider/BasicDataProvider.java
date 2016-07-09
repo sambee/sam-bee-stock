@@ -49,7 +49,7 @@ public class BasicDataProvider implements IProvider {
 	 * 
 	 * @return
 	 */
-	public boolean cleanAllCache(){
+	public void cleanAllCache(){
 		throw new NotYetImplementedException(this.getClass());
 	}
 
@@ -76,12 +76,5 @@ public class BasicDataProvider implements IProvider {
 		throw new NotYetImplementedException(this.getClass());
 	}
 	
-	/**
-	 * 
-	 */
-	@Override
-	public boolean existIgnoreTime(String... key) {
-		throw new NotYetImplementedException(this.getClass());
-	}
-	
+
 }
