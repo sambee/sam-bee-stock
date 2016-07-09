@@ -15,17 +15,19 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.11</version>
+		<scope>test</scope>
+	</dependency>
   </dependencies>
+
+  <!-- maven将当前项目所有依赖的jar文件提取到指定文件夹，可以利用maven-dependency-plugin实现 -->
   <modules>
   	<module>stock-loader</module>
     <module>stock-search</module>
-    <module>sam-cache</module>
-    <module>stock-app</module>
+    <!-- module>sam-cache</module -->
+    <!-- module>stock-app</module -->
   </modules>
 </project>

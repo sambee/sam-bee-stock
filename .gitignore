@@ -10,3 +10,5 @@ lib
 stock-data
 gen
 *.log
+*.ipr
+*.iml
