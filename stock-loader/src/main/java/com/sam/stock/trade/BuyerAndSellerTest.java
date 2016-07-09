@@ -7,15 +7,15 @@ public class BuyerAndSellerTest {
 
     public static void main(String[] args) throws InterruptedException {
     	
-    	/** ĞéÄâ½»Ò×Ëù */
+    	/** è™šæ‹Ÿäº¤æ˜“æ‰€ */
         MyAgent agent = new MyAgent();
    
        int pThreadSize = 5;
        ExecutorService pool = Executors.newFixedThreadPool(pThreadSize);
        
        for(int i=0;i<pThreadSize;i++){           
-           pool.execute(new Buy(agent, "Âò¼Ò" + i));
-           pool.execute(new Sell(agent, "Âô¼Ò" +i));           
+           pool.execute(new Buy(agent, "ä¹°å®¶" + i));
+           pool.execute(new Sell(agent, "å–å®¶" +i));           
      
        }
 
@@ -52,7 +52,7 @@ class MyAgent {
      
     boolean isClosed = false;
     
-    /** ÂòÍê¼´Ö¹ */
+    /** ä¹°å®Œå³æ­¢ */
     public void close(){ 
     	isClosed = true;
     	synchronized (this){
@@ -63,14 +63,14 @@ class MyAgent {
     
    
     public synchronized void sell(MyOrder order) {
-        System.out.println(" ++ ³öÊÛ¹ÉÆ±Ç° Index£º" + index);
+        System.out.println(" ++ å‡ºå”®è‚¡ç¥¨å‰ Indexï¼š" + index);
 
         while(index >= orders.length) {
         	if(isClosed){
-        		System.out.println("¡¾½»Ò×Ëù½»Ò×Ê±¼äÒÑ¹Ø±Õ£¬ÎŞ·¨½øĞĞ½»Ò×£¬´Ë¶©µ¥×÷·Ï¡¿:" + order);
+        		System.out.println("ã€äº¤æ˜“æ‰€äº¤æ˜“æ—¶é—´å·²å…³é—­ï¼Œæ— æ³•è¿›è¡Œäº¤æ˜“ï¼Œæ­¤è®¢å•ä½œåºŸã€‘:" + order);
         		return;
         	}
-            System.out.println(" >>>>>> ĞèÒª³öÊÛµÄ¹ÉÆ±Ì«¶àÁË:(£¬ÔİÍ£´¦Àí£¡");
+            System.out.println(" >>>>>> éœ€è¦å‡ºå”®çš„è‚¡ç¥¨å¤ªå¤šäº†:(ï¼Œæš‚åœå¤„ç†ï¼");
             try {
             	this.wait();
             } catch(InterruptedException e) {
@@ -79,20 +79,20 @@ class MyAgent {
         }
        
         orders[index] = order;
-       // System.out.println("³öÊÛ¹ÉÆ±£º" + order);        
+       // System.out.println("å‡ºå”®è‚¡ç¥¨ï¼š" + order);        
         index++;
         notifyAll();
     }
      
     public synchronized MyOrder buy() {
-       // System.out.println(" -- ¹ºÂòÇ°¹ÉÆ±ÊıÎª£º" + index );
+       // System.out.println(" -- è´­ä¹°å‰è‚¡ç¥¨æ•°ä¸ºï¼š" + index );
 
         while(index <= 0) {
         	if(isClosed){
-        		System.out.println("¡¾½»Ò×Ëù½»Ò×Ê±¼äÒÑ¹Ø±Õ£¬ÎŞ·¨½øĞĞ½»Ò×£¬ÎŞ·¨¹ºÂò¡¿");
+        		System.out.println("ã€äº¤æ˜“æ‰€äº¤æ˜“æ—¶é—´å·²å…³é—­ï¼Œæ— æ³•è¿›è¡Œäº¤æ˜“ï¼Œæ— æ³•è´­ä¹°ã€‘");
         		return null;
         	}
-            System.out.println("  >>>>>> ÒÑÃ»ÓĞ¹ÉÆ±¿ÉÒÔÂôÁË-_-!!£¬ÔİÍ£¹ºÂò£¡");
+            System.out.println("  >>>>>> å·²æ²¡æœ‰è‚¡ç¥¨å¯ä»¥å–äº†-_-!!ï¼Œæš‚åœè´­ä¹°ï¼");
             try {
                 this.wait();
             } catch(InterruptedException e) {
@@ -101,7 +101,7 @@ class MyAgent {
         } 
 
         index--;
-        //System.out.println("¹ºÂò¹ÉÆ±£º" + orders[index]);
+        //System.out.println("è´­ä¹°è‚¡ç¥¨ï¼š" + orders[index]);
         notifyAll();
         return orders[index];
     }
@@ -137,9 +137,9 @@ class Sell implements Runnable {
      
     public void run() {
         for(int i=0; i<100; i++) {
-        	MyOrder order = new MyOrder("µÚ" + i + "Ö»¹ÉÆ±");
+        	MyOrder order = new MyOrder("ç¬¬" + i + "åªè‚¡ç¥¨");
         	agent.sell(order);
-            //System.out.println("[Sell]£º " + order);
+            //System.out.println("[Sell]ï¼š " + order);
             try {
                 Thread.sleep(100);
             } catch(InterruptedException e) {
@@ -160,7 +160,7 @@ class Buy implements Runnable {
      
     public void run() {
         for(int i=0; i<100; i++) {
-            System.out.println(name + "¹ºÂòÁË:" +agent.buy());
+            System.out.println(name + "è´­ä¹°äº†:" +agent.buy());
             try {
                 Thread.sleep(100);
             } catch(InterruptedException e) {

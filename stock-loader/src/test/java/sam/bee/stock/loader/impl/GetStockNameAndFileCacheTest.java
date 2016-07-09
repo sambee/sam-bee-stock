@@ -1,28 +1,16 @@
 package sam.bee.stock.loader.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
+import org.junit.Test;
+import sam.bee.cache.FileCache;
+import sam.bee.cache.ICache;
+import sam.bee.stock.loader.BaseTest;
+import sam.bee.stock.loader.ILoaderAPI;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import sam.bee.stock.loader.BaseTest;
-import sam.bee.stock.loader.ILoaderAPI;
-import sam.bee.stock.loader.impl.GetAllShangHaiStockList;
-import sam.bee.stock.loader.impl.GetAllShengZhenStockList;
-import sam.bee.stock.loader.impl.QQHttpLoader;
-import sam.bee.stock.loader.impl.QQRealTimeDataApapter;
-import sam.bee.cache.AccessDatabaseCache;
-import sam.bee.cache.FileCache;
-import sam.bee.cache.ICache;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GetStockNameAndFileCacheTest extends BaseTest{
 
@@ -72,14 +60,14 @@ public class GetStockNameAndFileCacheTest extends BaseTest{
 		return list;
 	}
 	
-	private AccessDatabaseCache getDatabase(File dbFile) throws Exception{
-//		if(dbFile.exists()){
-//			dbFile.delete();
-//		}
-		
-		//create access file.
-		return new AccessDatabaseCache(dbFile);
-	}
+//	private AccessDatabaseCache getDatabase(File dbFile) throws Exception{
+////		if(dbFile.exists()){
+////			dbFile.delete();
+////		}
+//
+//		//create access file.
+//		return new AccessDatabaseCache(dbFile);
+//	}
 	
 
 }

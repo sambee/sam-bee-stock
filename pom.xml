@@ -23,7 +23,7 @@
 	</dependency>
   </dependencies>
 
-  <!-- maven将当前项目所有依赖的jar文件提取到指定文件夹，可以利用maven-dependency-plugin实现 -->
+  <!-- maven灏嗗綋鍓嶉」鐩墍鏈変緷璧栫殑jar鏂囦欢鎻愬彇鍒版寚瀹氭枃浠跺す锛屽彲浠ュ埄鐢╩aven-dependency-plugin瀹炵幇 -->
   <modules>
   	<module>stock-loader</module>
     <module>stock-search</module>
