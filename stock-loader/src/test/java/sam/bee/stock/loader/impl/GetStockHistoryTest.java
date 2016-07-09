@@ -11,15 +11,14 @@ import org.junit.Test;
 import sam.bee.stock.loader.BaseTest;
 import sam.bee.stock.loader.ILoaderAPI;
 import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IProvider;
+import sam.bee.porvider.IDataProvider;
+
+import static sam.bee.stock.Const.*;
 
 public class GetStockHistoryTest extends BaseTest{
 
-	
-	final IProvider provider = new FileDataProvider(System.getProperty("user.home") + "/.stocks");
-	final String HISTORY = "history";
-	final String EXCLUDE = "exclude";
-	final String CODE = "code";
+
+	private  final static  IDataProvider provider = new FileDataProvider(System.getProperty("user.home") + "/.stocks");
 
 
 	@Test
@@ -34,10 +33,10 @@ public class GetStockHistoryTest extends BaseTest{
 		
 		
 		ILoaderAPI loader = new LoaderApiImpl();
-		List<Map<String,String>> stockList = provider.getList(CODE, "shanghai");
+		List<Map<String,String>> stockList = provider.getList(CODE, SHUANG_HAI);
 		if(stockList==null){
 			stockList =  loader.getShangHaiStockList();
-			provider.set(stockList, CODE,"shanghai");
+			provider.set(stockList, CODE, SHUANG_HAI);
 		}
 
 		List<Task> tasks = new ArrayList<Task>();
@@ -49,10 +48,10 @@ public class GetStockHistoryTest extends BaseTest{
 		}
 		
 
-		stockList = provider.getList(CODE, "shengzhen");
+		stockList = provider.getList(CODE, SHENG_ZHEN);
 		if(stockList==null){
 			stockList =  loader.getShenZhenStockList();
-			provider.set(stockList, CODE,"shengzhen");
+			provider.set(stockList, CODE,SHENG_ZHEN);
 		}
 
 		//load shengzhen  stock history data.
@@ -91,13 +90,13 @@ public class GetStockHistoryTest extends BaseTest{
 	class Task implements Runnable{
 
 		public String code;
-		IProvider cache;
+		IDataProvider cache;
 		ILoaderAPI loader;
 		public String name;
 
 
 
-		public Task(String code, String name, IProvider cache, ILoaderAPI loader){
+		public Task(String code, String name, IDataProvider cache, ILoaderAPI loader){
 			this.code = code;
 			this.cache = cache;
 			this.loader = loader;

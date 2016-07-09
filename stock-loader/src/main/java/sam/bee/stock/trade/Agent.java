@@ -1,31 +1,14 @@
 package sam.bee.stock.trade;
 
-import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Agent {
-
-  private LinkedList<Order> ordersQueue = new LinkedList<Order>();
-//  ExecutorService executorService = Executors.newCachedThreadPool();
-  ExecutorService executorService = Executors.newFixedThreadPool(10);
-  int getHold(){
-	  return ordersQueue.size();
-  }
-  void placeOrder(Order order) {
-        ordersQueue.addLast(order);	        
-       // new Thread(new Handler()).start();
-        executorService.execute(new Handler());   
-  }    
-  
+public class Agent implements Observer{
 
 
-  class Handler implements Runnable {
-	@Override
-	public void run() {
-		if(ordersQueue.size()>0){
-			ordersQueue.remove(0).execute();
-		}		
-	}
-  }
+    @Override
+    public void update(Observable o, Object arg) {
+        Market market = (Market)o;
+        System.out.println("------------------- " + arg);
+    }
 }

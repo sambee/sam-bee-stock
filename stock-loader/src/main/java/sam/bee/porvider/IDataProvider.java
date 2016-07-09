@@ -5,7 +5,7 @@ import java.util.Map;
 
 
 
-public interface IProvider {
+public interface IDataProvider {
 
 	/**
 	 * 将值放到指定的目录下

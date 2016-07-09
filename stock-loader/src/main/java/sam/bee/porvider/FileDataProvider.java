@@ -30,6 +30,9 @@ public class FileDataProvider extends BasicDataProvider {
 		base = new File(fileSpace);
 
 	}
+	public FileDataProvider(){
+		this(System.getProperty("user.home") + "/.stocks");
+	}
 
 
 	public void set(String key, String... keys) throws IOException  {

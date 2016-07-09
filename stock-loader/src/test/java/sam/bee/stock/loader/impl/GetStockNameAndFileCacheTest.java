@@ -2,7 +2,7 @@ package sam.bee.stock.loader.impl;
 
 import org.junit.Test;
 import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IProvider;
+import sam.bee.porvider.IDataProvider;
 import sam.bee.stock.loader.BaseTest;
 import sam.bee.stock.loader.ILoaderAPI;
 
@@ -20,7 +20,7 @@ public class GetStockNameAndFileCacheTest extends BaseTest{
 		ILoaderAPI api = new LoaderApiImpl();
 		
 
-		IProvider cache = new FileDataProvider("build/stocks/realtime");
+		IDataProvider cache = new FileDataProvider("build/stocks/realtime");
 
 		logger.info("Get shang hai stock list.");
 		List<Map<String,String>> list =  api.getShangHaiStockList();
