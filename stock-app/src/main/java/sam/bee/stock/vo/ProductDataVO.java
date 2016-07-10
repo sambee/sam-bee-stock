@@ -116,12 +116,13 @@ public class ProductDataVO {
         sb.append("AverageValue:" + balancePrice + sep);
         sb.append("TotalMoney:" + totalMoney + sep);
         sb.append("TotalAmount:" + totalAmount + sep);
-        for(int i = 0; i < 5; i++) {
-            sb.append("BuyPrice" + (i + 1) + ":" + buyPrice[i] + sep);
-            sb.append("SellPrice" + (i + 1) + ":" + sellPrice[i] + sep);
-            sb.append("BuyAmount" + (i + 1) + ":" + buyAmount[i] + sep);
-            sb.append("SellAmount" + (i + 1) + ":" + sellAmount[i] + sep);
-        }
+
+            for (int i = 0; i < 5 && i < buyPrice.length; i++) {
+                sb.append("BuyPrice" + (i + 1) + ":" + buyPrice[i] + sep);
+                sb.append("SellPrice" + (i + 1) + ":" + sellPrice[i] + sep);
+                sb.append("BuyAmount" + (i + 1) + ":" + buyAmount[i] + sep);
+                sb.append("SellAmount" + (i + 1) + ":" + sellAmount[i] + sep);
+            }
 
         sb.append("OutAmount:" + outAmount + sep);
         sb.append("InAmount:" + inAmount + sep);

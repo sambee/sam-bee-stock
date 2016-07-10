@@ -8,7 +8,8 @@
 
 package sam.bee.stock.gui;
 
-import java.util.Vector;
+import java.util.*;
+import java.util.Arrays;
 
 import sam.bee.stock.vo.ProductDataVO;
 
@@ -25,4 +26,15 @@ public class ProductData {
     KLineData dayKLine[];
     KLineData min5KLine[];
 
+    @Override
+    public String toString() {
+        return "ProductData{" +
+                "sCode='" + sCode + '\'' +
+                ", realData=" + realData +
+                ", vMinLine=" + vMinLine +
+                ", vBill=" + vBill +
+                ", dayKLine=" + Arrays.toString(dayKLine) +
+                ", min5KLine=" + Arrays.toString(min5KLine) +
+                '}';
+    }
 }

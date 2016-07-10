@@ -1,28 +1,22 @@
 package sam.bee.stock.gui;
 
-import static sam.bee.stock.gui.Application.bDebug;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sam.bee.stock.event.SendCommand;
+import sam.bee.stock.service.vo.*;
+import sam.bee.stock.vo.BillDataVO;
+import sam.bee.stock.vo.MinDataVO;
+import sam.bee.stock.vo.ProductDataVO;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.Vector;
 
-import sam.bee.stock.event.SendCommand;
-import sam.bee.stock.service.vo.CMDBillVO;
-import sam.bee.stock.service.vo.CMDMarketSortVO;
-import sam.bee.stock.service.vo.MinReq;
-import sam.bee.stock.service.vo.CMDProductInfoVO;
-import sam.bee.stock.service.vo.CMDQuoteVO;
-import sam.bee.stock.service.vo.SortReq;
-import sam.bee.stock.service.vo.CMDTradeTimeVO;
-import sam.bee.stock.service.vo.ProductInfoListVO;
-import sam.bee.stock.vo.BillDataVO;
-import sam.bee.stock.vo.MinDataVO;
-import sam.bee.stock.vo.ProductDataVO;
+import static sam.bee.stock.gui.Application.bDebug;
 
 public class ReceiveThread extends Thread {
-
+	protected static final Logger logger = LoggerFactory.getLogger(ReceiveThread.class);
 	Application m_applet;
 	SendCommand m_borker;
 	
@@ -35,153 +29,153 @@ public class ReceiveThread extends Thread {
 	@Deprecated
 	@Override
 	public void run() {
-		DataInputStream reader = null;
-		while (m_applet != null && m_applet.bRunning) {
-			if (m_applet.socket == null) {
-				reader = null;
-				try {
-					Thread.sleep(500L);
-				} catch (InterruptedException interruptedexception) {
-				}
-				continue;
-			}
-			try {
-				if (reader == null)
-					reader = new DataInputStream(new BufferedInputStream(
-							m_applet.socket.getInputStream()));
-				byte cmd = reader.readByte();
-				switch (cmd) {
-				case 0: // '\0'
-					break;
-
-				case 1: // '\001'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  更新码表");
-					receiveCodeTable(reader);
-					break;
-
-				case 2: // '\002'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  个股行情");
-					receiveStockQuote(reader);
-					break;
-
-				case 3: // '\003'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  报价排名");
-					receiveClassSort(reader);
-					break;
-
-				case 4: // '\004'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  分时数据");
-					receiveMinLineData(reader);
-					break;
-
-				case 5: // '\005'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  成交明细");
-					receiveBillData(reader);
-					break;
-
-				case 6: // '\006'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  交易时间");
-					m_applet.m_timeRange = CMDTradeTimeVO.getObj(reader);
-					break;
-
-				case 7: // '\007'
-				
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  市场日期");
-					int date = reader.readInt();
-					int time = reader.readInt();
-					int oldDate = m_applet.m_iDate;
-					int oldTime = m_applet.m_iTime;
-					if (m_applet.m_iDate == 0 || date != oldDate) {
-						m_applet.m_iDate = date;
-						m_applet.vProductData.removeAllElements();
-					}
-					m_applet.m_iTime = time;
-					m_applet.repaintBottom();
-					Application _tmp1 = m_applet;
-					if (bDebug)
-						System.out.println("Date:" + m_applet.m_iDate + " "	+ time);
-					if (oldDate != m_applet.m_iDate
-							|| oldTime != m_applet.m_iTime)
-						m_applet.repaint();
-					break;
-
-				case 8: // '\b'
-					
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  综合排名");
-					receiveMarketSort(reader);
-					break;
-
-				case 9: // '\t'
-
-				case 10: // '\n'
-					m_applet.m_iMinLineInterval = reader.readInt();
-					Application _tmp9 = m_applet;
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  分时间隔:"
-								+ m_applet.m_iMinLineInterval);
-					if (m_applet.m_iMinLineInterval <= 0
-							|| m_applet.m_iMinLineInterval > 60)
-						m_applet.m_iMinLineInterval = 60;
-					break;
-
-				default:
-					Application _tmp10 = m_applet;
-					if (bDebug)
-						System.out.println("Receive cmd: " + cmd + "  非法数据");
-					m_applet.socket.close();
-					m_applet.socket = null;
-					m_borker.askForData(null);
-					break;
-				}
-
-			} catch (EOFException e) {
-				 {
-					if (m_applet != null) {
-						Application _tmp11 = m_applet;
-						if (bDebug){
-							e.printStackTrace();
-						}
-							
-					}
-					
-				}
-				try {
-					if (m_applet.socket != null)
-						m_applet.socket.close();
-					m_applet.socket = null;
-				} catch (Exception exception) {
-				}
-				if (m_applet != null && m_applet.bRunning)
-					m_borker.askForData(null);
-				continue;
-			} catch (Exception e) {
-
-				if (bDebug)
-				{
-					System.out.println("Socket error ");
-					e.printStackTrace();
-				}
-				if (m_applet != null && m_applet.bRunning) {
-					m_applet.socket = null;
-					m_borker.askForData(null);
-				}
-			}
-		}
-		System.out.println("ReceiveThread Exit !");
+//		DataInputStream reader = null;
+//		while (m_applet != null && m_applet.bRunning) {
+//			if (m_applet.socket == null) {
+//				reader = null;
+//				try {
+//					Thread.sleep(500L);
+//				} catch (InterruptedException interruptedexception) {
+//				}
+//				continue;
+//			}
+//			try {
+//				if (reader == null)
+//					reader = new DataInputStream(new BufferedInputStream(
+//							m_applet.socket.getInputStream()));
+//				byte cmd = reader.readByte();
+//				switch (cmd) {
+//				case 0: // '\0'
+//					break;
+//
+//				case 1: // '\001'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  更新码表");
+//					receiveCodeTable(reader);
+//					break;
+//
+//				case 2: // '\002'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  个股行情");
+//					receiveStockQuote(reader);
+//					break;
+//
+//				case 3: // '\003'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  报价排名");
+//					receiveClassSort(reader);
+//					break;
+//
+//				case 4: // '\004'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  分时数据");
+//					receiveMinLineData(reader);
+//					break;
+//
+//				case 5: // '\005'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  成交明细");
+//					receiveBillData(reader);
+//					break;
+//
+//				case 6: // '\006'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  交易时间");
+//					m_applet.m_timeRange = CMDTradeTimeVO.getObj(reader);
+//					break;
+//
+//				case 7: // '\007'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  市场日期");
+//					int date = reader.readInt();
+//					int time = reader.readInt();
+//					int oldDate = m_applet.m_iDate;
+//					int oldTime = m_applet.m_iTime;
+//					if (m_applet.m_iDate == 0 || date != oldDate) {
+//						m_applet.m_iDate = date;
+//						m_applet.vProductData.removeAllElements();
+//					}
+//					m_applet.m_iTime = time;
+//					m_applet.repaintBottom();
+//					Application _tmp1 = m_applet;
+//					if (bDebug)
+//						System.out.println("Date:" + m_applet.m_iDate + " "	+ time);
+//					if (oldDate != m_applet.m_iDate
+//							|| oldTime != m_applet.m_iTime)
+//						m_applet.repaint();
+//					break;
+//
+//				case 8: // '\b'
+//
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  综合排名");
+//					receiveMarketSort(reader);
+//					break;
+//
+//				case 9: // '\t'
+//
+//				case 10: // '\n'
+//					m_applet.m_iMinLineInterval = reader.readInt();
+//					Application _tmp9 = m_applet;
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  分时间隔:"
+//								+ m_applet.m_iMinLineInterval);
+//					if (m_applet.m_iMinLineInterval <= 0
+//							|| m_applet.m_iMinLineInterval > 60)
+//						m_applet.m_iMinLineInterval = 60;
+//					break;
+//
+//				default:
+//					Application _tmp10 = m_applet;
+//					if (bDebug)
+//						System.out.println("Receive cmd: " + cmd + "  非法数据");
+//					m_applet.socket.close();
+//					m_applet.socket = null;
+//					m_borker.askForData(null);
+//					break;
+//				}
+//
+//			} catch (EOFException e) {
+//				 {
+//					if (m_applet != null) {
+//						Application _tmp11 = m_applet;
+//						if (bDebug){
+//							e.printStackTrace();
+//						}
+//
+//					}
+//
+//				}
+//				try {
+//					if (m_applet.socket != null)
+//						m_applet.socket.close();
+//					m_applet.socket = null;
+//				} catch (Exception exception) {
+//				}
+//				if (m_applet != null && m_applet.bRunning)
+//					m_borker.askForData(null);
+//				continue;
+//			} catch (Exception e) {
+//
+//				if (bDebug)
+//				{
+//					System.out.println("Socket error ");
+//					e.printStackTrace();
+//				}
+//				if (m_applet != null && m_applet.bRunning) {
+//					m_applet.socket = null;
+//					m_borker.askForData(null);
+//				}
+//			}
+//		}
+//		System.out.println("ReceiveThread Exit !");
 	}
 
 	/**
@@ -318,61 +312,61 @@ public class ReceiveThread extends Thread {
 	 */
 	@Deprecated
 	private void receiveMinLineData(DataInputStream reader) throws IOException {
-//		String code = reader.readUTF();
-//		byte type = reader.readByte();
-//		int time = reader.readInt();
-//		MinDataVO values[] = MinReq.getObj(reader);
-//		ProductData stock = m_applet.getProductData(code);
-//		if (stock == null) {
-//			if (m_applet.vProductData.size() > 50)
-//				m_applet.vProductData.removeElementAt(50);
-//			stock = new ProductData();
-//			stock.sCode = code;
-//			m_applet.vProductData.insertElementAt(stock, 0);
-//		}
-//		stock.vMinLine = new Vector();
-//		int jMin = 0;
-//		for (int i = 0; i < values.length; i++) {
-//			int iIndex = Common.GetMinLineIndexFromTime(values[i].time,
-//					m_applet.m_timeRange, m_applet.m_iMinLineInterval);
-//			for (int j = jMin; j < iIndex; j++) {
-//				MinDataVO min = new MinDataVO();
-//				if (j > 0) {
-//					min.curPrice = ((MinDataVO) stock.vMinLine.elementAt(j - 1)).curPrice;
-//					min.totalAmount = ((MinDataVO) stock.vMinLine
-//							.elementAt(j - 1)).totalAmount;
-//					min.totalMoney = ((MinDataVO) stock.vMinLine
-//							.elementAt(j - 1)).totalMoney;
-//					min.averPrice = ((MinDataVO) stock.vMinLine
-//							.elementAt(j - 1)).averPrice;
-//					min.reserveCount = ((MinDataVO) stock.vMinLine
-//							.elementAt(j - 1)).reserveCount;
-//				} else if (stock.realData != null) {
-//					min.curPrice = stock.realData.yesterBalancePrice;
-//					min.averPrice = stock.realData.yesterBalancePrice;
-//				}
-//				stock.vMinLine.addElement(min);
-//			}
-//
-//			if (iIndex >= stock.vMinLine.size() - 1) {
-//				MinDataVO min = null;
-//				if (iIndex == stock.vMinLine.size() - 1) {
-//					min = (MinDataVO) stock.vMinLine.lastElement();
-//				} else {
-//					min = new MinDataVO();
-//					stock.vMinLine.addElement(min);
-//				}
-//				min.curPrice = values[i].curPrice;
-//				min.totalAmount = values[i].totalAmount;
-//				min.reserveCount = values[i].reserveCount;
-//				min.averPrice = values[i].averPrice;
-//				jMin = iIndex + 1;
-//			}
-//		}
-//
-//		if ((2 == m_applet.iCurrentPage || 1 == m_applet.iCurrentPage)
-//				&& m_applet.strCurrentCode.equals(stock.sCode))
-//			m_applet.repaint();
+		String code = reader.readUTF();
+		byte type = reader.readByte();
+		int time = reader.readInt();
+		MinDataVO values[] = MinReq.getObj(reader);
+		ProductData stock = m_applet.getProductData(code);
+		if (stock == null) {
+			if (m_applet.vProductData.size() > 50)
+				m_applet.vProductData.removeElementAt(50);
+			stock = new ProductData();
+			stock.sCode = code;
+			m_applet.vProductData.insertElementAt(stock, 0);
+		}
+		stock.vMinLine = new Vector();
+		int jMin = 0;
+		for (int i = 0; i < values.length; i++) {
+			int iIndex = Common.GetMinLineIndexFromTime(values[i].time,
+					m_applet.m_timeRange, m_applet.m_iMinLineInterval);
+			for (int j = jMin; j < iIndex; j++) {
+				MinDataVO min = new MinDataVO();
+				if (j > 0) {
+					min.curPrice = ((MinDataVO) stock.vMinLine.elementAt(j - 1)).curPrice;
+					min.totalAmount = ((MinDataVO) stock.vMinLine
+							.elementAt(j - 1)).totalAmount;
+					min.totalMoney = ((MinDataVO) stock.vMinLine
+							.elementAt(j - 1)).totalMoney;
+					min.averPrice = ((MinDataVO) stock.vMinLine
+							.elementAt(j - 1)).averPrice;
+					min.reserveCount = ((MinDataVO) stock.vMinLine
+							.elementAt(j - 1)).reserveCount;
+				} else if (stock.realData != null) {
+					min.curPrice = stock.realData.yesterBalancePrice;
+					min.averPrice = stock.realData.yesterBalancePrice;
+				}
+				stock.vMinLine.addElement(min);
+			}
+
+			if (iIndex >= stock.vMinLine.size() - 1) {
+				MinDataVO min = null;
+				if (iIndex == stock.vMinLine.size() - 1) {
+					min = (MinDataVO) stock.vMinLine.lastElement();
+				} else {
+					min = new MinDataVO();
+					stock.vMinLine.addElement(min);
+				}
+				min.curPrice = values[i].curPrice;
+				min.totalAmount = values[i].totalAmount;
+				min.reserveCount = values[i].reserveCount;
+				min.averPrice = values[i].averPrice;
+				jMin = iIndex + 1;
+			}
+		}
+
+		if ((2 == m_applet.iCurrentPage || 1 == m_applet.iCurrentPage)
+				&& m_applet.strCurrentCode.equals(stock.sCode))
+			m_applet.repaint();
 	}
 
 	/**
@@ -451,31 +445,32 @@ public class ReceiveThread extends Thread {
 	 */
 	@Deprecated
 	private void receiveCodeTable(DataInputStream reader) throws IOException {
-		ProductInfoListVO list = CMDProductInfoVO.getObj(reader);
-		for (int i = 0; i < list.productInfos.length; i++) {
-			boolean bFound = false;
-			for (int j = 0; j < m_applet.m_codeList.size(); j++) {
-				if (!list.productInfos[i].code.equalsIgnoreCase((String) m_applet.m_codeList.elementAt(j))){
-					continue;
-				}					
-				bFound = true;
-				break;
-			}
-
-			if (!bFound){
-				m_applet.m_codeList.addElement(list.productInfos[i].code);
-			}
-				
-			CodeTable codeTable = new CodeTable();
-			codeTable.sName = list.productInfos[i].name;
-			codeTable.sPinyin = list.productInfos[i].pinyin;
-			codeTable.status = list.productInfos[i].status;
-			codeTable.fUnit = list.productInfos[i].fUnit;
-			codeTable.tradeSecNo = list.productInfos[i].tradeSecNo;
-			m_applet.m_ProductByHttp.put(list.productInfos[i].code, codeTable);
-			m_applet.m_iCodeDate = list.date;
-			m_applet.m_iCodeTime = list.time;
-		}
+		logger.info("更新码表");
+//		ProductInfoListVO list = CMDProductInfoVO.getObj(reader);
+//		for (int i = 0; i < list.productInfos.length; i++) {
+//			boolean bFound = false;
+//			for (int j = 0; j < m_applet.m_codeList.size(); j++) {
+//				if (!list.productInfos[i].code.equalsIgnoreCase((String) m_applet.m_codeList.elementAt(j))){
+//					continue;
+//				}
+//				bFound = true;
+//				break;
+//			}
+//
+//			if (!bFound){
+//				m_applet.m_codeList.addElement(list.productInfos[i].code);
+//			}
+//
+//			CodeTable codeTable = new CodeTable();
+//			codeTable.sName = list.productInfos[i].name;
+//			codeTable.sPinyin = list.productInfos[i].pinyin;
+//			codeTable.status = list.productInfos[i].status;
+//			codeTable.fUnit = list.productInfos[i].fUnit;
+//			codeTable.tradeSecNo = list.productInfos[i].tradeSecNo;
+//			m_applet.m_ProductByHttp.put(list.productInfos[i].code, codeTable);
+//			m_applet.m_iCodeDate = list.date;
+//			m_applet.m_iCodeTime = list.time;
+//		}
 
 	}
 }

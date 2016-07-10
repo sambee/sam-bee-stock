@@ -39,7 +39,10 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 //import sam.bee.stock.event.HttpProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sam.bee.stock.event.SendCommand;
+import sam.bee.stock.trade.Market;
 import sam.bee.stock.vo.TradeTimeVO;
 
 // www.trinnion.com/javacodeviewer
@@ -55,9 +58,10 @@ import sam.bee.stock.vo.TradeTimeVO;
 public class Application extends Applet implements FocusListener {
 
 	private static final long serialVersionUID = 0x5ba23793a3c0f861L;
-
+	protected static final Logger logger = LoggerFactory.getLogger(Application.class);
 	private boolean isStandalone;
-	
+    private static Application application;
+    /** */ public Market market;
 	
 	/** 列表图　*/static final int PAGE_MULTIQUOTE = 0;
 	/** 分钟线索引号 */ static final int PAGE_MINLINE = 1;
@@ -110,10 +114,9 @@ public class Application extends Applet implements FocusListener {
 	public BasicPage mainGraph;
 	Page_Bottom bottomGraph;
 	public static RHColor rhColor = null;
-	String strSocketIP;
-	int iSocketPort;
-	public String strURLPath;
-	Socket socket;
+
+
+//	Socket socket;
 //	SendThread sendThread;
 //	ReceiveThread receiveThread;
 	SendCommand borker;
@@ -152,16 +155,39 @@ public class Application extends Applet implements FocusListener {
 				: getParameter(key) == null ? def : getParameter(key);
 	}
 
-	public static void main(String args[]) {
+    /**
+     *
+     * @return
+     */
+    public static Application getInstance(){
+        if(application==null){
+            try {
+                application = new Application();
+                application.market = new Market();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-		final Application applet = new Application();		
-		applet.isStandalone = true;
+        }
+        return  application;
+    }
+
+    /**
+     *
+     * @param args
+     * @throws Exception
+     */
+	public static void main(String args[]) throws Exception {
+
+		final Application application = getInstance();
+
+		application.isStandalone = true;
 		Frame frame = new Frame(){
-			private static final long serialVersionUID = 0x5ee6fe2cdea8105dL;
-				protected void processWindowEvent(WindowEvent e) {
-				super.processWindowEvent(e);
+            private static final long serialVersionUID = 1L;
+			protected void processWindowEvent(WindowEvent e) {
+			super.processWindowEvent(e);
 				if (e.getID() == 201) {
-					applet.destroy();
+					application.destroy();
 					System.exit(0);
 				}
 			}
@@ -172,7 +198,7 @@ public class Application extends Applet implements FocusListener {
 			}
 		};
 		frame.setTitle("Applet Frame");
-		frame.add(applet, "Center");
+		frame.add(application, "Center");
 		frame.setSize(800, 600);
 		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -181,21 +207,22 @@ public class Application extends Applet implements FocusListener {
 		//frame.setSize(d.width, d.height);
 		frame.setLocation((d.width - frame.getSize().width) / 2, (d.height - frame.getSize().height) / 2);
 		frame.setVisible(true);
-		applet.init();
-		applet.start();
-		System.out.println("------ " + applet.getAppletInfo());
+		application.init();
+		application.start();
+		logger.info("------ " + application.getAppletInfo());
 	}
 
 	public ProductData getProductData(String code) {
-		for (int i = 0; i < vProductData.size(); i++)
+		for (int i = 0; i < vProductData.size(); i++) {
+			logger.info("getProductData" + ((ProductData) vProductData.elementAt(i)));
 			if (((ProductData) vProductData.elementAt(i)).sCode.equals(code))
 				return (ProductData) vProductData.elementAt(i);
-
+		}
 		return null;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Application() {
+	public Application() throws Exception {
 		isStandalone = false;
 		iCurrentPage = -1;
 		strCurrentCode = "";
@@ -213,7 +240,7 @@ public class Application extends Applet implements FocusListener {
 		m_rcBottom = null;
 		mainGraph = null;
 		bottomGraph = null;
-		socket = null;
+//		socket = null;
 		bRunning = true;
 		popupMenu = new PopupMenu();
 		m_strMarketName = "";
@@ -235,7 +262,7 @@ public class Application extends Applet implements FocusListener {
 				e.printStackTrace();
 		}
 		if (bDebug){
-			System.out.println("Application starting... ");
+			logger.info("Application starting... ");
 		}
 	}
 
@@ -243,18 +270,13 @@ public class Application extends Applet implements FocusListener {
 		
 		//run by main
 		if (isStandalone) {
-			strSocketIP = "218.25.163.212";
-			iSocketPort = 8002;
-			strURLPath = "http://" + strSocketIP + ":" + iSocketPort + "/hqApplet/";
+
 			bDebug = true;
 			iShowBuySellPrice = 1;
 		} else {
 		//run by applet
-			URL url = getDocumentBase();
-			strSocketIP = url.getHost();
-			iSocketPort = Integer.parseInt(getParameter("Port", "888"));
-			strURLPath = url.toString();
-			strURLPath = strURLPath.substring(0, strURLPath.lastIndexOf('/') + 1);
+//			URL url = getDocumentBase();
+
 			bDebug = Integer.parseInt(getParameter("Debug", "0"))==1;
 			iShowBuySellPrice = Integer.parseInt(getParameter("ShowBuySell","3"));
 			if (iShowBuySellPrice > 5 || iShowBuySellPrice <= 0){
@@ -270,7 +292,7 @@ public class Application extends Applet implements FocusListener {
 		try {
 			m_resourceBundle = ResourceBundle.getBundle("rc/string", new Locale(strLanguageName, ""));
 		} catch (Exception e) {
-			System.out.println("Language resource loaded failed !");
+			logger.info("Language resource loaded failed !");
 			e.printStackTrace();
 		}
 		m_rcMain = null;
@@ -576,7 +598,7 @@ public class Application extends Applet implements FocusListener {
 
 	@SuppressWarnings("deprecation")
 	void userCommand(String sCmd) {
-		System.out.println("cmd=" + sCmd);
+		logger.info("cmd=" + sCmd);
 		try{
 		if (sCmd.equals("about") && !bAboutDlgShow) {
 			Frame f = getParentFrame(this);
@@ -607,7 +629,7 @@ public class Application extends Applet implements FocusListener {
 		}
 		int iCmd = Integer.parseInt(sCmd);
 		if (bDebug)
-			System.out.println("sCmd = ==" + iCmd);
+			logger.info("sCmd = ==" + iCmd);
 		switch (iCmd) {
 		case 1: // '\001'
 			mainGraph = new Page_Bill(m_rcMain, this);
@@ -733,18 +755,18 @@ public class Application extends Applet implements FocusListener {
 //		httpThread.askForData(null);
 //		sendThread.AskForData(null);
 		borker.stop();
-		try {
-			if (socket != null)
-				socket.close();
-		} catch (IOException e) {
-			System.out.println("eroo111");
-			e.printStackTrace();
-		}
-		socket = null;
+//		try {
+//			if (socket != null)
+//				socket.close();
+//		} catch (IOException e) {
+//			logger.info("eroo111");
+//			e.printStackTrace();
+//		}
+//		socket = null;
 //		httpThread = null;
 //		receiveThread = null;
 		if (bDebug)
-			System.out.println("destroy HQApplet ");
+			logger.info("destroy HQApplet ");
 	}
 
 	int getPrecision(String sCode) {

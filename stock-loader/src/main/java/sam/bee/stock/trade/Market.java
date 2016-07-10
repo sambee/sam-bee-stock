@@ -22,7 +22,7 @@ public class Market extends Observable  {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Set<String> tradeDate = new HashSet<String>();
     Map<String, Map> histories = new HashMap<String, Map>();
-
+    List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
     private boolean isTrade(){
         int   week   =   calendar.get(Calendar.DAY_OF_WEEK)-1;
         final int SUNDAY =0;
@@ -35,15 +35,19 @@ public class Market extends Observable  {
     }
 
     public Market() throws Exception {
-        List<Map<String, String>> allStockInfos =  dataProvider.getList(CODE, SHUANG_HAI);
-        List<Map<String, String>> list =  dataProvider.getList(CODE, SHENG_ZHEN);
-        for(Map<String,String> m : allStockInfos){
+        List<Map<String, String>> shanghai =  dataProvider.getList(CODE, SHUANG_HAI);
+
+        List<Map<String, String>> shengzhen =  dataProvider.getList(CODE, SHENG_ZHEN);
+        for(Map<String,String> m : shanghai){
             codeMap.put(m.get(STOCK_CODE), m);
             codeMap.put(m.get(STOCK_NAME), m);
         }
-        for(Map<String,String> m : list){
+        allStockInfos.addAll(allStockInfos);
+
+        for(Map<String,String> m : shengzhen){
             codeMap.put(m.get(STOCK_CODE), m);
             codeMap.put(m.get(STOCK_NAME), m);
+            allStockInfos.add(m);
         }
         final String TRADE_CODE = "601398";
         List<Map<String, String>> dl = getHistory(TRADE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
@@ -51,7 +55,14 @@ public class Market extends Observable  {
         for(String s : sl){
             tradeDate.add(s);
         }
+
+
+
         setDate(currentDate);
+    }
+
+    public List<Map<String,String>> getStockInfos(){
+        return allStockInfos;
     }
 
     public String getCurrentDate(){

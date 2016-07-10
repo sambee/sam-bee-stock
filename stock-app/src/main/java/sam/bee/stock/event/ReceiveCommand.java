@@ -1,6 +1,15 @@
 package sam.bee.stock.event;
 
-import static sam.bee.stock.gui.Application.bDebug;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sam.bee.porvider.FileDataProvider;
+import sam.bee.porvider.IDataProvider;
+import sam.bee.stock.gui.*;
+import sam.bee.stock.service.vo.MinReq;
+import sam.bee.stock.service.vo.ProductInfoListVO;
+import sam.bee.stock.vo.MinDataVO;
+import sam.bee.stock.vo.ProductDataVO;
+import sam.bee.stock.vo.ProductInfoVO;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -10,25 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IDataProvider;
-import sam.bee.stock.gui.Application;
-import sam.bee.stock.gui.CodeTable;
-import sam.bee.stock.gui.Common;
-import sam.bee.stock.gui.Packet_MultiQuote;
-import sam.bee.stock.gui.Page_MultiQuote;
-import sam.bee.stock.gui.ProductData;
-import sam.bee.stock.service.vo.CMDProductInfoVO;
-import sam.bee.stock.service.vo.CMDQuoteVO;
-import sam.bee.stock.service.vo.MinReq;
-import sam.bee.stock.service.vo.SortReq;
-import sam.bee.stock.service.vo.ProductInfoListVO;
-import sam.bee.stock.vo.MinDataVO;
-import sam.bee.stock.vo.ProductDataVO;
-import sam.bee.stock.vo.ProductInfoVO;
+import static sam.bee.stock.Const.*;
+import static sam.bee.stock.gui.Application.bDebug;
 
 public class ReceiveCommand extends Thread{
-
+	protected static final Logger logger = LoggerFactory.getLogger(ReceiveCommand.class);
 	Application m_application;
 	SendCommand m_borker;
 	
@@ -195,7 +190,7 @@ public class ReceiveCommand extends Thread{
 	                ProductInfoListVO list =  getProductInfoListVOs();
 	             
 	                if(bDebug){
-	                    System.out.println("码表时间:" + list.date + " " + list.time);
+	                   logger.info("码表时间:" + list.date + " " + list.time);
 	                }
 	                m_application.m_iCodeDate = list.date;
 	                m_application.m_iCodeTime = list.time;
@@ -236,29 +231,27 @@ public class ReceiveCommand extends Thread{
 	        }
 
 	    }
-			
-	   
-	   
-		final static String DATABASE = "stocks";
+
+
 		final static String STOCK_DATA_TABLE= "STOCK_DATA";
-		final static String STOCK_INFO_TABLE= "STOCK_INFO";
+
 		
 	   public ProductInfoListVO getProductInfoListVOs() throws Exception {
 		   IDataProvider dataProvider = new FileDataProvider();
 			ProductInfoListVO productInfoList = new ProductInfoListVO();
 			try {
-				List<Map<String,String>> data  = dataProvider.getList(DATABASE, STOCK_INFO_TABLE);
+				List<Map<String,String>> data  = dataProvider.getList(CODE, SHUANG_HAI);
 			       productInfoList.date = 2014;
 			        productInfoList.time = 1200;
-			        
+
 			        ProductInfoVO productInfos[] = new ProductInfoVO[data.size()];
 			        for(int i = 0; i < productInfos.length; i++) {
 			        	  productInfos[i] = new ProductInfoVO();
 			        	  Map<String,String> m = data.get(i);
-			              productInfos[i].code =m.get("CODE");
+			              productInfos[i].code =m.get(STOCK_CODE);
 			              productInfos[i].status = 1;
 			              productInfos[i].fUnit = 2;
-			              productInfos[i].name = m.get("DESC");
+			              productInfos[i].name = m.get(STOCK_NAME);
 			              productInfos[i].pinyin = new String[4];
 			              
 			              for(int j = 0; j < productInfos[i].pinyin.length; j++){
@@ -283,7 +276,7 @@ public class ReceiveCommand extends Thread{
 	   
 	   public static ProductDataVO[] getProductDataVOs() throws Exception {
 	    	IDataProvider dataProvider = new FileDataProvider();
-	    	List<Map<String, String>> data = dataProvider.getList(DATABASE, STOCK_INFO_TABLE);
+	    	List<Map<String, String>> data = dataProvider.getList(CODE, SHUANG_HAI);
 	    	
 	    	ProductDataVO vo[] = new ProductDataVO[data.size()];
 	        for(int i = 0; i < vo.length; i++) {
@@ -330,8 +323,8 @@ public class ReceiveCommand extends Thread{
 	   
 	   public static ProductDataVO[] getCMDSortVOs() throws Exception {
 	    	List<Map<String, String>> data;
-	    	IDataProvider h2 = new FileDataProvider();
-	    	data = h2.getList(DATABASE, STOCK_INFO_TABLE);
+	    	IDataProvider dataProvider = new FileDataProvider();
+	    	data = dataProvider.getList(CODE, SHUANG_HAI);
 			  ProductDataVO[] vo = new ProductDataVO[data.size()];
 		        for(int i = 0; i < vo.length; i++) {
 		        	vo[i] = new ProductDataVO();

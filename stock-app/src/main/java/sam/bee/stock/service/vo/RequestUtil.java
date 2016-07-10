@@ -233,11 +233,12 @@ public class RequestUtil {
 	 */
 	public static ProductInfoListVO getStockInfoList(String url)
 			throws MalformedURLException, IOException {
-		ByteArrayInputStream arrayInput = new ByteArrayInputStream(getRepoent(url));
-		GZIPInputStream gzin = new GZIPInputStream(arrayInput);
-		DataInputStream input = new DataInputStream(gzin);
-		input.readByte();
-		ProductInfoListVO productInfoList = CMDProductInfoVO.getObj(input);
+//		ByteArrayInputStream arrayInput = new ByteArrayInputStream(getRepoent(url));
+//		GZIPInputStream gzin = new GZIPInputStream(arrayInput);
+//		DataInputStream input = new DataInputStream(gzin);
+//		input.readByte();
+//		ProductInfoListVO productInfoList = CMDProductInfoVO.getObj(input);
+		ProductInfoListVO productInfoList =CMDProductInfoVO.getObj();
 //		 ProductInfoListVO productInfoList = new ProductInfoListVO();
 //		ProductInfoVO productInfos[] = new ProductInfoVO[1];
 //		  productInfos[0] = new ProductInfoVO();
@@ -273,4 +274,13 @@ public class RequestUtil {
 //			ex.printStackTrace();
 //		}
 //	}
+
+	public  static void askForIndex(CMDQuoteVO cmd)  {
+		try {
+			sendRequest(cmd, null);
+		}
+		catch (IOException ex){
+			ex.printStackTrace();
+		}
+	}
 }

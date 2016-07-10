@@ -19,6 +19,8 @@ import java.net.URLConnection;
 import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sam.bee.stock.service.vo.ProductInfoListVO;
 import sam.bee.stock.service.vo.RequestUtil;
 import sam.bee.stock.vo.ProductInfoVO;
@@ -46,7 +48,7 @@ class Packet_HttpRequest {
 //HQApplet, CodeTable, Packet_HttpRequest, KLineData, 
 //ProductData
 public class HttpThread extends Thread {
-
+    protected static final Logger logger = LoggerFactory.getLogger(HttpThread.class);
     Application m_application;
     private static final int TYPE_CODELIST = 0;
     private static final int TYPE_OTHER = 1;
@@ -89,7 +91,8 @@ public class HttpThread extends Thread {
 	private void getCodeList() {
         for(boolean bSucceed = false; m_application != null && m_application.bRunning && !bSucceed;) {
             try {
-                ProductInfoListVO list = RequestUtil.getStockInfoList(m_application.strURLPath + "data/productinfo.dat");
+                logger.info("load code list");
+                ProductInfoListVO list = RequestUtil.getStockInfoList(null);
              
                 if(bDebug){
                     System.out.println("码表时间:" + list.date + " " + list.time);
@@ -197,10 +200,12 @@ public class HttpThread extends Thread {
             hisStatus[i] = new KLineData();
             int date = input.readInt();
            // if(date.length() > 6)
-            if(date>6)
-                hisStatus[i].date = 199700000000L + (long)date;
-            else
+            if(date>6) {
+                hisStatus[i].date = 199700000000L + (long) date;
+            }
+            else {
                 hisStatus[i].date = date + 0x130b7d0;
+            }
             hisStatus[i].openPrice = input.readFloat();
             hisStatus[i].highPrice = input.readFloat();
             hisStatus[i].lowPrice = input.readFloat();
@@ -220,11 +225,13 @@ public class HttpThread extends Thread {
     @SuppressWarnings("unchecked")
 	private void getDayLine(Packet_HttpRequest request) {
         try {
-            String strURL = m_application.strURLPath + "data/day/" + request.sCode.trim() + ".day.zip";
+          //  String strURL = m_application.strURLPath + "data/day/" + request.sCode.trim() + ".day.zip";
+//
+//            if(bDebug)
+//                System.out.println("Get Day : " + strURL);
 
-            if(bDebug)
-                System.out.println("Get Day : " + strURL);
-            KLineData hisStatus[] = getHistoryData(strURL);
+            logger.info("load day line data.");
+            KLineData hisStatus[] = getHistoryData(null);
             ProductData product = m_application.getProductData(request.sCode);
             if(product == null) {
                 if(m_application.vProductData.size() > 50){
@@ -267,7 +274,9 @@ public class HttpThread extends Thread {
     @SuppressWarnings("unchecked")
 	private void get5MinLine(Packet_HttpRequest request) {
         try {
-            KLineData hisStatus[] = getHistoryData(m_application.strURLPath + "data/5min/" + request.sCode + ".5min.zip");
+            logger.info("load 5 min line");
+//            KLineData hisStatus[] = getHistoryData(m_application.strURLPath + "data/5min/" + request.sCode + ".5min.zip");
+            KLineData hisStatus[] = getHistoryData(null);
             ProductData stock = m_application.getProductData(request.sCode);
             if(stock == null) {
                 if(m_application.vProductData.size() > 50)
