@@ -16,13 +16,15 @@ import static sam.bee.stock.trade.DataUtil.getDate;
 public class Market extends Observable  {
 
     IDataProvider dataProvider = new FileDataProvider();
-    Map<String, Map<String,String>>  codeMap = new HashMap<String, Map<String, String>>();
+    Map<String, Map<String,String>> codeOrNameMap = new HashMap<String, Map<String, String>>();
     String currentDate = "2015-12-31";
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Set<String> tradeDate = new HashSet<String>();
+    Set<String> codes = new HashSet<String>();
     Map<String, Map> histories = new HashMap<String, Map>();
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
+
     private boolean isTrade(){
         int   week   =   calendar.get(Calendar.DAY_OF_WEEK)-1;
         final int SUNDAY =0;
@@ -39,15 +41,17 @@ public class Market extends Observable  {
 
         List<Map<String, String>> shengzhen =  dataProvider.getList(CODE, SHENG_ZHEN);
         for(Map<String,String> m : shanghai){
-            codeMap.put(m.get(STOCK_CODE), m);
-            codeMap.put(m.get(STOCK_NAME), m);
+            codeOrNameMap.put(m.get(STOCK_CODE), m);
+            codeOrNameMap.put(m.get(STOCK_NAME), m);
+            codes.add(m.get(STOCK_CODE));
         }
         allStockInfos.addAll(allStockInfos);
 
         for(Map<String,String> m : shengzhen){
-            codeMap.put(m.get(STOCK_CODE), m);
-            codeMap.put(m.get(STOCK_NAME), m);
+            codeOrNameMap.put(m.get(STOCK_CODE), m);
+            codeOrNameMap.put(m.get(STOCK_NAME), m);
             allStockInfos.add(m);
+            codes.add(m.get(STOCK_CODE));
         }
         final String TRADE_CODE = "601398";
         List<Map<String, String>> dl = getHistory(TRADE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
@@ -56,9 +60,7 @@ public class Market extends Observable  {
             tradeDate.add(s);
         }
 
-
-
-        setDate(currentDate);
+        setCurrentDate(currentDate);
     }
 
     public List<Map<String,String>> getStockInfos(){
@@ -69,18 +71,42 @@ public class Market extends Observable  {
         return currentDate;
     }
 
-    public void addAgent(Agent agent){
-        addObserver(agent);
-    }
-
-    public void setDate(String date) throws ParseException {
+    public void setCurrentDate(String date) throws ParseException {
         this.currentDate = date;
         Date d =  dateFormat.parse(date);
         calendar.setTime(d);
     }
 
+    public List<Map<String,String>> getCurrentData() throws Exception {
+
+        List<Map<String,String>>  list  =  dataProvider.getList(INDEX,currentDate );
+        if(list!=null && list.size()>0){
+            return list;
+        }
+        list = new LinkedList<Map<String,String>>();
+        Map m;
+        Map mInfo;
+        for(String code : codes){
+            m = getCurrentData(code);
+            System.out.println(code + "=" + m);
+            if(m!=null) {
+                mInfo = codeOrNameMap.get(code);
+                m.put(STOCK_CODE, code);
+                m.put(STOCK_NAME, mInfo.get(STOCK_NAME));
+                list.add(m);
+            }
+        }
+        dataProvider.set(list, INDEX,currentDate );
+        return list;
+    }
+
+    public void addAgent(Agent agent){
+        addObserver(agent);
+    }
+
+
     public Map getStock(String code){
-        return codeMap.get(code);
+        return codeOrNameMap.get(code);
     }
 
     private int getIntDate(String date){
@@ -99,7 +125,7 @@ public class Market extends Observable  {
         return currentDate;
     }
 
-    public Map getData(String code, String toDate) throws Exception {
+    public Map<String, String> getData(String code, String toDate) throws Exception {
         List<Map<String, String>>  data = getHistory(code, toDate);
         if(data!=null && data.size()>0){
             Map d  =data .get(data.size()-1);
@@ -111,7 +137,7 @@ public class Market extends Observable  {
         return null;
     }
 
-    public Map getData(String code) throws Exception {
+    public Map<String, String> getCurrentData(String code) throws Exception {
         return getData(code, currentDate);
     }
 
@@ -121,13 +147,19 @@ public class Market extends Observable  {
         List<Map<String,String>> list = dataProvider.getList(HISTORY, code+"-"+name);
         List<Map<String,String>> ret = new ArrayList<Map<String, String>>();
         int icDate = getIntDate(toDate);
-        for(Map<String,String> m : list){
-            String date = m.get(DATE);
-            int iDate = getIntDate(date);
-            if(iDate>icDate){
-                break;
+        if(list!=null){
+            for(Map<String,String> m : list) {
+                String date = m.get(DATE);
+                int iDate = getIntDate(date);
+                if (iDate > icDate) {
+                    break;
+                }
+                String vol = (String)m.get(VOLUME);
+                if(vol!=null && !("000").equals(vol)){
+                    ret.add(m);
+                }
+
             }
-            ret.add(m);
         }
         return ret;
     }

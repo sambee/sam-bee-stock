@@ -7,6 +7,9 @@ public abstract class BaseTest {
 
 	protected static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
+	public String getTestCode(){
+		return "600578";
+	}
 //	@BeforeClass
 //	public static void setUpBeforeClass() throws Exception {
 //	}

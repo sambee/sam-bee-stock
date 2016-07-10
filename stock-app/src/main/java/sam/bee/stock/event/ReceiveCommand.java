@@ -2,11 +2,10 @@ package sam.bee.stock.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IDataProvider;
 import sam.bee.stock.gui.*;
 import sam.bee.stock.service.vo.MinReq;
 import sam.bee.stock.service.vo.ProductInfoListVO;
+import sam.bee.stock.trade.Market;
 import sam.bee.stock.vo.MinDataVO;
 import sam.bee.stock.vo.ProductDataVO;
 import sam.bee.stock.vo.ProductInfoVO;
@@ -24,7 +23,7 @@ import static sam.bee.stock.gui.Application.bDebug;
 
 public class ReceiveCommand extends Thread{
 	protected static final Logger logger = LoggerFactory.getLogger(ReceiveCommand.class);
-	Application m_application;
+	Application m_application = null;
 	SendCommand m_borker;
 	
 
@@ -57,7 +56,7 @@ public class ReceiveCommand extends Thread{
 	 */
 	private void receiveClassSort() {
 
-	
+		logger.info("=== 报价排名 ===");
 		
 		try {
 			ProductDataVO[] vo = getCMDSortVOs();
@@ -69,8 +68,7 @@ public class ReceiveCommand extends Thread{
 				if (m_application.iCurrentPage != 0)
 					return;
 				Page_MultiQuote page = (Page_MultiQuote) m_application.mainGraph;
-				
-				if (page.sortBy != sortBy 
+				if (page.sortBy != sortBy
 						|| page.isDescend != isDescend
 						|| page.iStart != start){
 					return;
@@ -100,8 +98,8 @@ public class ReceiveCommand extends Thread{
 	 * 
 	 */
 	private void receiveCodeTable(){
-		
-		
+
+		logger.info("=== 获取代码表 ===");
 		ProductInfoListVO productInfoList;
 		try {
 			productInfoList = getProductInfoListVOs();
@@ -148,9 +146,9 @@ public class ReceiveCommand extends Thread{
 		
 		
 		try {
-			
 
-		ProductDataVO[] vo = getProductDataVOs();	        
+		logger.info("=== 接收个股行情 ===");
+		ProductDataVO[] vo = getProductDataVOs();
 	
 		String sCode = "";
 		for (int i = 0; i < vo.length; i++) {
@@ -190,7 +188,7 @@ public class ReceiveCommand extends Thread{
 	                ProductInfoListVO list =  getProductInfoListVOs();
 	             
 	                if(bDebug){
-	                   logger.info("码表时间:" + list.date + " " + list.time);
+						logger.info("=== 获取股票代码信息 ==="  + list.date + " " + list.time);
 	                }
 	                m_application.m_iCodeDate = list.date;
 	                m_application.m_iCodeTime = list.time;
@@ -237,11 +235,14 @@ public class ReceiveCommand extends Thread{
 
 		
 	   public ProductInfoListVO getProductInfoListVOs() throws Exception {
-		   IDataProvider dataProvider = new FileDataProvider();
+
 			ProductInfoListVO productInfoList = new ProductInfoListVO();
 			try {
-				List<Map<String,String>> data  = dataProvider.getList(CODE, SHUANG_HAI);
-			       productInfoList.date = 2014;
+				if(bDebug){
+					logger.info("=== getProductInfoListVOs ===" );
+				}
+				List<Map<String,String>> data  = Application.getInstance().market.getStockInfos();
+			       productInfoList.date = 2016;
 			        productInfoList.time = 1200;
 
 			        ProductInfoVO productInfos[] = new ProductInfoVO[data.size()];
@@ -273,21 +274,32 @@ public class ReceiveCommand extends Thread{
 			}
 			return productInfoList;
 	    }
-	   
+
+		/**
+		 * 获取实时股价信息
+		 * @return
+		 * @throws Exception
+		 */
 	   public static ProductDataVO[] getProductDataVOs() throws Exception {
-	    	IDataProvider dataProvider = new FileDataProvider();
-	    	List<Map<String, String>> data = dataProvider.getList(CODE, SHUANG_HAI);
-	    	
+		   Market market = Application.getInstance().market;
+		   if(bDebug){
+			   logger.info("=== 获取实时股价数据 ===" + market.getCurrentDate());
+		   }
+	    	List<Map<String, String>> data = market.getCurrentData();
+
+
+		   //这里实现实时的数据加载，可以使用不同的数据提供给界面显示数据。
 	    	ProductDataVO vo[] = new ProductDataVO[data.size()];
 	        for(int i = 0; i < vo.length; i++) {
 	        	Map<String,String> m = data.get(i);
 	        	vo[i] = new ProductDataVO();
-	        	vo[i].code =m.get("CODE");
+	        	vo[i].code =m.get(STOCK_CODE);
+				vo[i].name =m.get(STOCK_NAME);
 	        	vo[i].time = new Date();
-	        	vo[i].closePrice = 1.0F;
-	        	vo[i].openPrice =  2.0F;
-	        	vo[i].highPrice =  3.0F;
-	        	vo[i].lowPrice =  4.0F;
+	        	vo[i].closePrice =  Float.valueOf(m.get(CLOSE));
+	        	vo[i].openPrice = Float.valueOf(m.get(OPEN));
+	        	vo[i].highPrice = Float.valueOf(m.get(HIGH));
+	        	vo[i].lowPrice =  Float.valueOf(m.get(LOW));
 	        	vo[i].curPrice =  5.0F;
 	        	vo[i].totalAmount = 6L;
 	        	vo[i].totalMoney =  7.0D;
@@ -322,22 +334,24 @@ public class ReceiveCommand extends Thread{
 	    }
 	   
 	   public static ProductDataVO[] getCMDSortVOs() throws Exception {
+		    logger.info("=== 获取排序的实时股票信息 ===");
 	    	List<Map<String, String>> data;
-	    	IDataProvider dataProvider = new FileDataProvider();
-	    	data = dataProvider.getList(CODE, SHUANG_HAI);
+
+	    	data = Application.getInstance().market.getCurrentData();
 			  ProductDataVO[] vo = new ProductDataVO[data.size()];
 		        for(int i = 0; i < vo.length; i++) {
 		        	vo[i] = new ProductDataVO();
 		            Map<String,String> m = data.get(i);
-		            vo[i].code = m.get("CODE");
-		            vo[i].name = m.get("DESC");
+		            vo[i].code = m.get(STOCK_CODE);
+		            vo[i].name = m.get(STOCK_NAME);
 		            vo[i].yesterBalancePrice = 1F;
-		            vo[i].closePrice = 1F;
-		            vo[i].openPrice = 2F;
-		            vo[i].highPrice = 3F;
-		            vo[i].lowPrice =4F;
-		            vo[i].curPrice = 5F;
-		            vo[i].totalAmount = 6;
+					vo[i].closePrice =  Float.valueOf(m.get(CLOSE));
+					vo[i].openPrice = Float.valueOf(m.get(OPEN));
+					vo[i].highPrice = Float.valueOf(m.get(HIGH));
+					vo[i].lowPrice =  Float.valueOf(m.get(LOW));
+					//最新
+		            vo[i].curPrice = Float.valueOf(m.get(CLOSE)).floatValue();
+		            vo[i].totalAmount = Long.valueOf(m.get(VOLUME));
 		            vo[i].totalMoney = 7D;
 		            vo[i].curAmount = 8;
 		            vo[i].amountRate = 9F;
@@ -362,6 +376,7 @@ public class ReceiveCommand extends Thread{
     * @throws IOException
     */
 	private void receiveMinLineData(DataInputStream reader) throws IOException {
+		logger.info("=== 获取分钟数据 ===");
 		String code = reader.readUTF();
 		byte type = reader.readByte();
 		int time = reader.readInt();
@@ -425,7 +440,8 @@ public class ReceiveCommand extends Thread{
     * @throws Exception
     */
    MinDataVO[] getMinDataVO() throws Exception {
-     
+
+	   logger.info("=== 获取分钟数据 ===");
      MinDataVO mins[] = new MinDataVO[10];
      for(int i = 0; i < mins.length; i++) {
          mins[i] = new MinDataVO();

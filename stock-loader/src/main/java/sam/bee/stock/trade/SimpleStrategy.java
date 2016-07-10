@@ -35,7 +35,7 @@ public class SimpleStrategy implements IStrategy{
     @Override
     public Descition execute(Object arg) throws Exception {
         String date = (String) arg;
-        Map data = getMarket().getData(code);
+        Map data = getMarket().getCurrentData(code);
 
         if(data!=null) {
 

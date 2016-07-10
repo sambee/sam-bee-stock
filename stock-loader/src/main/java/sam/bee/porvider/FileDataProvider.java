@@ -36,9 +36,9 @@ public class FileDataProvider extends BasicDataProvider {
 
 
 	public void set(String key, String... keys) throws IOException  {
-		set(key.getBytes(), keys);
+		set(key.getBytes("UTF-8"), keys);
 	};
-	
+
 	
 	@Override
 	public void set(byte[] bytes, String... keys)throws IOException {

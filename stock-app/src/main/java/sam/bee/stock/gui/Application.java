@@ -58,7 +58,7 @@ import sam.bee.stock.vo.TradeTimeVO;
 public class Application extends Applet implements FocusListener {
 
 	private static final long serialVersionUID = 0x5ba23793a3c0f861L;
-	protected static final Logger logger = LoggerFactory.getLogger(Application.class);
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
 	private boolean isStandalone;
     private static Application application;
     /** */ public Market market;
@@ -107,11 +107,13 @@ public class Application extends Applet implements FocusListener {
 	/**
 	 * 成交明细
 	 */
-	@SuppressWarnings("rawtypes")	public  Vector vProductData;
+	@SuppressWarnings("rawtypes")	public Vector vProductData;
 
 	private Rectangle m_rcMain;
 	private Rectangle m_rcBottom;
+
 	public BasicPage mainGraph;
+
 	Page_Bottom bottomGraph;
 	public static RHColor rhColor = null;
 
@@ -213,8 +215,9 @@ public class Application extends Applet implements FocusListener {
 	}
 
 	public ProductData getProductData(String code) {
+        logger.info("获取股票K线数据 " + code);
 		for (int i = 0; i < vProductData.size(); i++) {
-			logger.info("getProductData" + ((ProductData) vProductData.elementAt(i)));
+
 			if (((ProductData) vProductData.elementAt(i)).sCode.equals(code))
 				return (ProductData) vProductData.elementAt(i);
 		}

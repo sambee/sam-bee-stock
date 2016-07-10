@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sam.bee.stock.service.vo.SortReq;
 import sam.bee.stock.vo.ProductDataVO;
 import static sam.bee.stock.gui.Application.bDebug;
@@ -22,7 +24,7 @@ import static sam.bee.stock.gui.Application.bDebug;
  *
  */
 public class Page_MultiQuote extends BasicPage {
-
+    private static final Logger logger = LoggerFactory.getLogger(Page_MultiQuote.class);
     static byte flag = 0;
     ProductDataVO backQuoteData[];
     private int iDynamicIndex;
@@ -121,7 +123,7 @@ public class Page_MultiQuote extends BasicPage {
         m_htItemInfo.put("UpValue", new MultiQuoteItemInfo(super.application.getShowString("ChangeValue"), 65, 2));
         m_htItemInfo.put("UpRate", new MultiQuoteItemInfo(super.application.getShowString("ChangeRate"), 65, 3));
         m_htItemInfo.put("ReverseCount", new MultiQuoteItemInfo(super.application.getShowString("Order"), 70, -1));
-        m_htItemInfo.put("Balance", new MultiQuoteItemInfo(super.application.getShowString("Balance"), 60, -1));
+        m_htItemInfo.put("Balanc", new MultiQuoteItemInfo(super.application.getShowString("Balance"), 60, -1));
         m_htItemInfo.put("OpenPrice", new MultiQuoteItemInfo(super.application.getShowString("Open"), 55, -1));
         m_htItemInfo.put("HighPrice", new MultiQuoteItemInfo(super.application.getShowString("High"), 55, -1));
         m_htItemInfo.put("LowPrice", new MultiQuoteItemInfo(super.application.getShowString("Low"), 55, -1));
@@ -239,7 +241,7 @@ public class Page_MultiQuote extends BasicPage {
             int num = iStart + i;
             ProductDataVO data = quoteData[i];
             if(data.code == null) {
-                System.out.println("Code = null");
+                logger.info("Code = null");
             } else {
                 CodeTable stockTable = (CodeTable)super.application.m_ProductByHttp.get(data.code);
                 String stockName = "-";

@@ -15,6 +15,7 @@ import java.util.Vector;
 
 import static sam.bee.stock.gui.Application.bDebug;
 
+@Deprecated
 public class ReceiveThread extends Thread {
 	protected static final Logger logger = LoggerFactory.getLogger(ReceiveThread.class);
 	Application m_applet;
@@ -29,6 +30,7 @@ public class ReceiveThread extends Thread {
 	@Deprecated
 	@Override
 	public void run() {
+		throw new RuntimeException("Not used yet. ");
 //		DataInputStream reader = null;
 //		while (m_applet != null && m_applet.bRunning) {
 //			if (m_applet.socket == null) {

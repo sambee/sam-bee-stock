@@ -8,34 +8,23 @@
 
 package sam.bee.stock.gui;
 
-import static java.util.Calendar.MINUTE;
-import static java.util.Calendar.SECOND;
-import static sam.bee.stock.gui.Application.bDebug;
-import static sam.bee.stock.gui.Application.logger;
-import static sam.bee.stock.gui.Common.TYPE_INDEX;
-import static sam.bee.stock.gui.Common.TYPE_INDEX_MAIN;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sam.bee.stock.service.vo.CMDQuoteVO;
+import sam.bee.stock.service.vo.Req;
+import sam.bee.stock.service.vo.RequestUtil;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-import sam.bee.stock.service.vo.CMDDateVO;
-import sam.bee.stock.service.vo.CMDMinLineIntervalVO;
-import sam.bee.stock.service.vo.CMDProductInfoVO;
-import sam.bee.stock.service.vo.CMDQuoteVO;
-import sam.bee.stock.service.vo.SortReq;
-import sam.bee.stock.service.vo.CMDTradeTimeVO;
-import sam.bee.stock.service.vo.Req;
-import sam.bee.stock.service.vo.RequestUtil;
+import static sam.bee.stock.gui.Application.bDebug;
 
 // Referenced classes of package gnnt.MEBS.HQApplet:
 //            HQApplet, ProductData
 @Deprecated
 public class SendThread extends Thread {
-
+    private static final Logger logger = LoggerFactory.getLogger(SendThread.class);
     @SuppressWarnings("rawtypes")
 	private Vector vPacket;
     Calendar m_calCodeTable;

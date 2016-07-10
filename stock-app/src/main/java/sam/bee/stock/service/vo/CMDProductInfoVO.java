@@ -8,16 +8,13 @@
 
 package sam.bee.stock.service.vo;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IDataProvider;
 import sam.bee.stock.gui.Application;
 import sam.bee.stock.trade.Market;
 import sam.bee.stock.vo.ProductInfoVO;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import static sam.bee.stock.Const.STOCK_CODE;
 import static sam.bee.stock.Const.STOCK_NAME;
