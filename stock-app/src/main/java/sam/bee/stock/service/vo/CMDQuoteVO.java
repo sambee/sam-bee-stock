@@ -10,11 +10,6 @@ package sam.bee.stock.service.vo;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import sam.bee.porvider.H2DatabaseCache;
 import sam.bee.stock.service.HQServiceUtil;
 import sam.bee.stock.vo.ProductDataVO;
 

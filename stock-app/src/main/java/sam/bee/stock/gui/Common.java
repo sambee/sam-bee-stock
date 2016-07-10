@@ -112,7 +112,7 @@ public class Common {
         }
     }
 
-    static int GetMinLineIndexFromTime(int hhmmss, TradeTimeVO timeRange[], int iMinLineInterval) {
+    public static int GetMinLineIndexFromTime(int hhmmss, TradeTimeVO timeRange[], int iMinLineInterval) {
         if(timeRange == null)
             return 0;
         int hhmm = hhmmss / 100;

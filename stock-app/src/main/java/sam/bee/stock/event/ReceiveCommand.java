@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import sam.bee.porvider.H2DatabaseCache;
+import sam.bee.porvider.FileDataProvider;
+import sam.bee.porvider.IDataProvider;
 import sam.bee.stock.gui.Application;
 import sam.bee.stock.gui.CodeTable;
 import sam.bee.stock.gui.Common;
@@ -243,10 +244,10 @@ public class ReceiveCommand extends Thread{
 		final static String STOCK_INFO_TABLE= "STOCK_INFO";
 		
 	   public ProductInfoListVO getProductInfoListVOs() throws Exception {
-	    	H2DatabaseCache h2 = new H2DatabaseCache();
+		   IDataProvider dataProvider = new FileDataProvider();
 			ProductInfoListVO productInfoList = new ProductInfoListVO();
 			try {
-				List<Map<String,String>> data  = h2.getList(DATABASE, STOCK_INFO_TABLE);
+				List<Map<String,String>> data  = dataProvider.getList(DATABASE, STOCK_INFO_TABLE);
 			       productInfoList.date = 2014;
 			        productInfoList.time = 1200;
 			        
@@ -281,8 +282,8 @@ public class ReceiveCommand extends Thread{
 	    }
 	   
 	   public static ProductDataVO[] getProductDataVOs() throws Exception {
-	    	H2DatabaseCache h2 = new H2DatabaseCache();
-	    	List<Map<String, String>> data = h2.getList(DATABASE, STOCK_INFO_TABLE);
+	    	IDataProvider dataProvider = new FileDataProvider();
+	    	List<Map<String, String>> data = dataProvider.getList(DATABASE, STOCK_INFO_TABLE);
 	    	
 	    	ProductDataVO vo[] = new ProductDataVO[data.size()];
 	        for(int i = 0; i < vo.length; i++) {
@@ -329,7 +330,7 @@ public class ReceiveCommand extends Thread{
 	   
 	   public static ProductDataVO[] getCMDSortVOs() throws Exception {
 	    	List<Map<String, String>> data;
-	    	H2DatabaseCache h2 = new H2DatabaseCache();
+	    	IDataProvider h2 = new FileDataProvider();
 	    	data = h2.getList(DATABASE, STOCK_INFO_TABLE);
 			  ProductDataVO[] vo = new ProductDataVO[data.size()];
 		        for(int i = 0; i < vo.length; i++) {
@@ -367,24 +368,24 @@ public class ReceiveCommand extends Thread{
     * @param reader
     * @throws IOException
     */
-	private void receiveMinLineData() throws IOException {
+	private void receiveMinLineData(DataInputStream reader) throws IOException {
 		String code = reader.readUTF();
 		byte type = reader.readByte();
 		int time = reader.readInt();
 		MinDataVO values[] = MinReq.getObj(reader);
-		ProductData stock = m_applet.getProductData(code);
+		ProductData stock = m_application.getProductData(code);
 		if (stock == null) {
-			if (m_applet.vProductData.size() > 50)
-				m_applet.vProductData.removeElementAt(50);
+			if (m_application.vProductData.size() > 50)
+				m_application.vProductData.removeElementAt(50);
 			stock = new ProductData();
 			stock.sCode = code;
-			m_applet.vProductData.insertElementAt(stock, 0);
+			m_application.vProductData.insertElementAt(stock, 0);
 		}
 		stock.vMinLine = new Vector();
 		int jMin = 0;
 		for (int i = 0; i < values.length; i++) {
 			int iIndex = Common.GetMinLineIndexFromTime(values[i].time,
-					m_applet.m_timeRange, m_applet.m_iMinLineInterval);
+					m_application.m_timeRange, m_application.m_iMinLineInterval);
 			for (int j = jMin; j < iIndex; j++) {
 				MinDataVO min = new MinDataVO();
 				if (j > 0) {
@@ -420,9 +421,9 @@ public class ReceiveCommand extends Thread{
 			}
 		}
 
-		if ((2 == m_applet.iCurrentPage || 1 == m_applet.iCurrentPage)
-				&& m_applet.strCurrentCode.equals(stock.sCode))
-			m_applet.repaint();		
+		if ((2 == m_application.iCurrentPage || 1 == m_application.iCurrentPage)
+				&& m_application.strCurrentCode.equals(stock.sCode))
+			m_application.repaint();
 	}
 	
    /**

@@ -20,7 +20,7 @@ public class ProductData {
 
     public String sCode;
     public ProductDataVO realData;
-    Vector vMinLine;
+    public Vector vMinLine;
     Vector vBill;
     KLineData dayKLine[];
     KLineData min5KLine[];

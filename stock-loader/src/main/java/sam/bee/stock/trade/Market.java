@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static sam.bee.stock.Const.*;
+import static sam.bee.stock.trade.DataUtil.getDate;
 
 /**
  * Created by Administrator on 2016/7/9.
@@ -16,10 +17,23 @@ public class Market extends Observable  {
 
     IDataProvider dataProvider = new FileDataProvider();
     Map<String, Map<String,String>>  codeMap = new HashMap<String, Map<String, String>>();
-    String currentDate = "2016-01-01";
+    String currentDate = "2015-12-31";
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Set<String> tradeDate = new HashSet<String>();
     Map<String, Map> histories = new HashMap<String, Map>();
+
+    private boolean isTrade(){
+        int   week   =   calendar.get(Calendar.DAY_OF_WEEK)-1;
+        final int SUNDAY =0;
+        final int SATURDAY =0;
+
+        if(week==SUNDAY || week==SATURDAY){
+            return true;
+        }
+        return tradeDate.contains(currentDate);
+    }
+
     public Market() throws Exception {
         List<Map<String, String>> allStockInfos =  dataProvider.getList(CODE, SHUANG_HAI);
         List<Map<String, String>> list =  dataProvider.getList(CODE, SHENG_ZHEN);
@@ -31,10 +45,16 @@ public class Market extends Observable  {
             codeMap.put(m.get(STOCK_CODE), m);
             codeMap.put(m.get(STOCK_NAME), m);
         }
+        final String TRADE_CODE = "601398";
+        List<Map<String, String>> dl = getHistory(TRADE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
+        String[] sl = getDate(dl);
+        for(String s : sl){
+            tradeDate.add(s);
+        }
         setDate(currentDate);
     }
 
-    public String getDate(){
+    public String getCurrentDate(){
         return currentDate;
     }
 
@@ -52,7 +72,7 @@ public class Market extends Observable  {
         return codeMap.get(code);
     }
 
-    private int getDate(String date){
+    private int getIntDate(String date){
         return Integer.valueOf(date.replaceAll("-", ""));
     }
 
@@ -61,8 +81,10 @@ public class Market extends Observable  {
         String date  = dateFormat.format(calendar.getTime());
 
         currentDate = date;
-        setChanged();
-        notifyObservers(currentDate);
+        if(isTrade()) {
+            setChanged();
+            notifyObservers(currentDate);
+        }
         return currentDate;
     }
 
@@ -75,18 +97,22 @@ public class Market extends Observable  {
                 return d;
             }
         }
-
         return null;
     }
+
+    public Map getData(String code) throws Exception {
+        return getData(code, currentDate);
+    }
+
 
     public List<Map<String, String>> getHistory(String code, String toDate) throws Exception {
         String name = (String) getStock(code).get(STOCK_NAME);
         List<Map<String,String>> list = dataProvider.getList(HISTORY, code+"-"+name);
         List<Map<String,String>> ret = new ArrayList<Map<String, String>>();
-        int icDate = getDate(toDate);
+        int icDate = getIntDate(toDate);
         for(Map<String,String> m : list){
             String date = m.get(DATE);
-            int iDate = getDate(date);
+            int iDate = getIntDate(date);
             if(iDate>icDate){
                 break;
             }

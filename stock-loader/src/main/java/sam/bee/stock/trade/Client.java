@@ -8,15 +8,16 @@ public class Client {
 	 */
 	 public static void main(String[] args) throws Exception {
 		 Market market = new Market();
-
+		 SimpleStrategy simpleStrategy =  new SimpleStrategy();
+		 simpleStrategy.setMarket(market);
 		 Agent agent = new Agent();
-		market.addAgent(agent);
+		 agent.setStrategy(simpleStrategy);
+		 market.addAgent(agent);
 		 for(int i=0;i<180; i++){
-			 String date = market.next();
-			 System.out.println(date);
+			 market.next();
 		 }
 
-	        System.exit(0);
+	     System.exit(0);
 	  }
 
 }

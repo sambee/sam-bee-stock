@@ -28,6 +28,6 @@
   	<module>stock-loader</module>
     <!--<module>stock-search</module>-->
     <!-- module>sam-cache</module -->
-    <!-- module>stock-app</module -->
+    <module>stock-app</module>
   </modules>
 </project>

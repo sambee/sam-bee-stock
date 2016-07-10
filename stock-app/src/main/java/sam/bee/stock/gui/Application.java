@@ -88,7 +88,7 @@ public class Application extends Applet implements FocusListener {
 	int m_iTime;
 	// TradeTimeVO m_timeRange[];
 	public TradeTimeVO m_timeRange[];
-	int m_iMinLineInterval;
+	public  int m_iMinLineInterval;
 	
 	/**
 	 * 码表
@@ -104,7 +104,7 @@ public class Application extends Applet implements FocusListener {
 	 * 成交明细
 	 */
 	@SuppressWarnings("rawtypes")	public  Vector vProductData;
-	
+
 	private Rectangle m_rcMain;
 	private Rectangle m_rcBottom;
 	public BasicPage mainGraph;

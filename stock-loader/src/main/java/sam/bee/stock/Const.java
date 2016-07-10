@@ -10,6 +10,11 @@ public class Const {
     public  final static  String CODE = "code";
     public  final static  String STOCK_CODE = "STOCK_CODE";
     public  final static  String STOCK_NAME = "STOCK_NAME";
+    public  final static  String OPEN = "OPEN";
+    public  final static  String CLOSE = "CLOSE";
+    public  final static  String VOLUME = "VOLUME";
+    public  final static  String HIGH = "HIGH";
+
     public final static String SHUANG_HAI = "shanghai";
     public final static String SHENG_ZHEN = "shengzhen";
     public final static String DATE = "DATE";

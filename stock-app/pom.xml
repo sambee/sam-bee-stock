@@ -16,19 +16,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-  	<dependency>
-			<groupId>sam.bee.stock</groupId>
-			<artifactId>stock-cache</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-	</dependency>
+   
 	<dependency>
 			<groupId>sam.bee.stock</groupId>
 			<artifactId>stock-loader</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-	</dependency>
- 	<dependency>
-			<groupId>sam.bee.stock</groupId>
-			<artifactId>stock-search</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 	</dependency>
     <dependency>       
@@ -38,6 +29,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <!--
   <plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -50,4 +42,5 @@
 				</configuration>
 			</plugin>
 	</plugins>
+	-->
 </project>
