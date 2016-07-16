@@ -10,10 +10,10 @@
 
 Modules
    stock_app
-   stock_serach
    stock_loader
 
 History
 
 * 2014-11-18 添加股票GUI/添加缓存策略/
 * 2016-07-16 修复应用界面，修复后可以运行显示界面
+* 2016-07-16 添加邮件通知功能
