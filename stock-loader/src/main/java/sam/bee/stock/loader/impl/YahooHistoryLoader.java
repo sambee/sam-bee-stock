@@ -33,7 +33,7 @@ public class YahooHistoryLoader extends BaseLoader{
 //
 //		Ø  月份是从0开始的，如9月数据，则写为08。
 //	http://heipark.iteye.com/blog/1423812
-	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\") >${code}.sz<#else>${code}.SS</#if>";
+	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >${code}.sz<#else>${code}.SS</#if>";
 
 	@Override
 	protected List<String> get(Object... params) throws Exception {

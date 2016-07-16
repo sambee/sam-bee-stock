@@ -30,7 +30,7 @@ public class QQHttpLoader extends BaseLoader{
 		Map root = new HashMap();
 		root.put("list", list);
 		String request = FreeMarkerUtils.convert(URL_TEMPLATE, root);
-		//System.out.println(request);
+		//logger.debug(request);
 		return getResponse(request);
 	}
 

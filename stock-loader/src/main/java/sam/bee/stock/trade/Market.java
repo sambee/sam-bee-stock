@@ -1,5 +1,6 @@
 package sam.bee.stock.trade;
 
+import org.slf4j.Logger;
 import sam.bee.porvider.FileDataProvider;
 import sam.bee.porvider.IDataProvider;
 
@@ -15,6 +16,8 @@ import static sam.bee.stock.trade.DataUtil.getDate;
  */
 public class Market extends Observable  {
 
+    Logger logger = org.slf4j.LoggerFactory.getLogger(Market.class);
+
     IDataProvider dataProvider = new FileDataProvider();
     Map<String, Map<String,String>> codeOrNameMap = new HashMap<String, Map<String, String>>();
     String currentDate = "2015-12-31";
@@ -22,7 +25,7 @@ public class Market extends Observable  {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Set<String> tradeDate = new HashSet<String>();
     Set<String> codes = new HashSet<String>();
-    Map<String, Map> histories = new HashMap<String, Map>();
+    Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
 
     private boolean isTrade(){
@@ -88,7 +91,7 @@ public class Market extends Observable  {
         Map mInfo;
         for(String code : codes){
             m = getCurrentData(code);
-            System.out.println(code + "=" + m);
+            logger.debug(code + "=" + m);
             if(m!=null) {
                 mInfo = codeOrNameMap.get(code);
                 m.put(STOCK_CODE, code);
@@ -143,8 +146,17 @@ public class Market extends Observable  {
 
 
     public List<Map<String, String>> getHistory(String code, String toDate) throws Exception {
+
         String name = (String) getStock(code).get(STOCK_NAME);
-        List<Map<String,String>> list = dataProvider.getList(HISTORY, code+"-"+name);
+        String key = code+"-"+name;
+        List<Map<String,String>> list;
+        if(histories.get(key)!=null){
+            list = histories.get(key);
+        }
+        else{
+            list = dataProvider.getList(HISTORY, key );
+            histories.put(key, list);
+        }
         List<Map<String,String>> ret = new ArrayList<Map<String, String>>();
         int icDate = getIntDate(toDate);
         if(list!=null){

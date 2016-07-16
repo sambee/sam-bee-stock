@@ -81,7 +81,7 @@ public class QQRealTimeDataApapter implements IDataAdapter{
 		for(Object obj : list){
 			String tmp = (String)obj;
 			
-			//System.out.println(tmp);
+			//logger.debug(tmp);
 			
 			String[] values = tmp.replaceAll("\"", "").replaceAll(";", "").split("=");
 			String[] fields = values[1].split("~");
@@ -89,7 +89,7 @@ public class QQRealTimeDataApapter implements IDataAdapter{
 			for(int i=0;i<fields.length;i++){	
 				if(fields[i]!=null && fields[i].length()>0){
 					
-					//System.out.println(String.format("%d%s%s", i, FIELDS[i], fields[i]));
+					//logger.debug(String.format("%d%s%s", i, FIELDS[i], fields[i]));
 					map.put(FIELDS[i], fields[i]);
 				}
 				

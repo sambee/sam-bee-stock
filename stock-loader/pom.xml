@@ -98,6 +98,12 @@
 			<version>2.0.3</version>
 		</dependency>
 		-->
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.5.0-b01</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -145,8 +151,8 @@
 
 <!--
 
-  Ö´ĞĞmvn dependency:copy-dependencies 
-  ËùÓĞÒÀÀµµÄjar½«ÌáÈ¡µ½libÄ¿Â¼
+  æ‰§è¡Œmvn dependency:copy-dependencies 
+  æ‰€æœ‰ä¾èµ–çš„jarå°†æå–åˆ°libç›®å½•
  
 -->
 		 <plugin>
@@ -165,8 +171,8 @@
 				  <overWriteReleases>false</overWriteReleases>
 				  <overWriteSnapshots>false</overWriteSnapshots>
 				  <overWriteIfNewer>true</overWriteIfNewer>
-				  <excludeTransitive>false</excludeTransitive><!-- ±íÊ¾ÊÇ·ñ²»°üº¬¼ä½ÓÒÀÀµµÄ°ü£» --> 
-				  <stripVersion>true</stripVersion><!-- ±íÊ¾¸´ÖÆµÄjarÎÄ¼şÈ¥µô°æ±¾ĞÅÏ¢¡£-->
+				  <excludeTransitive>false</excludeTransitive><!-- è¡¨ç¤ºæ˜¯å¦ä¸åŒ…å«é—´æ¥ä¾èµ–çš„åŒ…ï¼› --> 
+				  <stripVersion>true</stripVersion><!-- è¡¨ç¤ºå¤åˆ¶çš„jaræ–‡ä»¶å»æ‰ç‰ˆæœ¬ä¿¡æ¯ã€‚-->
 				</configuration>
 			  </execution>
 			</executions>
