@@ -40,9 +40,8 @@ public class Market extends Observable  {
     }
 
     public Market() throws Exception {
-        List<Map<String, String>> shanghai =  dataProvider.getList(CODE, SHUANG_HAI);
+        List<Map<String, String>> shanghai =  dataProvider.getList(CODE, ALL_STOCK_INFO);
 
-        List<Map<String, String>> shengzhen =  dataProvider.getList(CODE, SHENG_ZHEN);
         for(Map<String,String> m : shanghai){
             codeOrNameMap.put(m.get(STOCK_CODE), m);
             codeOrNameMap.put(m.get(STOCK_NAME), m);
@@ -50,12 +49,7 @@ public class Market extends Observable  {
         }
         allStockInfos.addAll(allStockInfos);
 
-        for(Map<String,String> m : shengzhen){
-            codeOrNameMap.put(m.get(STOCK_CODE), m);
-            codeOrNameMap.put(m.get(STOCK_NAME), m);
-            allStockInfos.add(m);
-            codes.add(m.get(STOCK_CODE));
-        }
+
         final String TRADE_CODE = "601398";
         List<Map<String, String>> dl = getHistory(TRADE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
         String[] sl = getDate(dl);
@@ -99,7 +93,7 @@ public class Market extends Observable  {
                 list.add(m);
             }
         }
-        dataProvider.set(list, INDEX,currentDate );
+        dataProvider.setList(list, INDEX,currentDate );
         return list;
     }
 

@@ -24,14 +24,14 @@ public class GetStockNameAndFileCacheTest extends BaseTest{
 
 		logger.info("Get shang hai stock list.");
 		List<Map<String,String>> list =  api.getShangHaiStockList();
-		cache.set(list, "shuanghai");
+		cache.setList(list, "shuanghai");
 
 		List<Map<String,String>> actual = cache.getList("shuanghai");
 		validate(list, actual);
 
 		logger.info("Get sheng zhen stock list.");
 		list =  api.getShenZhenStockList();
-		cache.set(list, "shengzhen");
+		cache.setList(list, "shengzhen");
 		
 		actual = cache.getList("shengzhen");
 		validate(list, actual);

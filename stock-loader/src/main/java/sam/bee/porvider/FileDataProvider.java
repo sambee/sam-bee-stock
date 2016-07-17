@@ -117,7 +117,7 @@ public class FileDataProvider extends BasicDataProvider {
 	}
 
 	@Override
-	public void set(List<Map<String, String>> values, String... keys)
+	public void setList(List<Map<String, String>> values, String... keys)
 			throws Exception {
 		set(JsonHelper.toJSON(values).toString(), keys);
 	}

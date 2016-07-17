@@ -33,10 +33,10 @@ public class GetStockHistoryTest extends BaseTest{
 		
 		
 		ILoaderAPI loader = new LoaderApiImpl();
-		List<Map<String,String>> stockList = provider.getList(CODE, SHUANG_HAI);
+		List<Map<String,String>> stockList = provider.getList(CODE, ALL_STOCK_INFO);
 		if(stockList==null){
 			stockList =  loader.getShangHaiStockList();
-			provider.set(stockList, CODE, SHUANG_HAI);
+			provider.setList(stockList, CODE, ALL_STOCK_INFO);
 		}
 
 		List<Task> tasks = new ArrayList<Task>();
@@ -48,10 +48,10 @@ public class GetStockHistoryTest extends BaseTest{
 		}
 		
 
-		stockList = provider.getList(CODE, SHENG_ZHEN);
+		stockList = provider.getList(CODE, ALL_STOCK_INFO);
 		if(stockList==null){
 			stockList =  loader.getShenZhenStockList();
-			provider.set(stockList, CODE,SHENG_ZHEN);
+			provider.setList(stockList, CODE,ALL_STOCK_INFO);
 		}
 
 		//load shengzhen  stock history data.
@@ -121,7 +121,7 @@ public class GetStockHistoryTest extends BaseTest{
 					
 				});
 				logger.info("Loaded:" + getName(code, name));
-				cache.set(list, HISTORY,  getName(code, name));
+				cache.setList(list, HISTORY,  getName(code, name));
 
 				
 			} catch (Exception e) {	

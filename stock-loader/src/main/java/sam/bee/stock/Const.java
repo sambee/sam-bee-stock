@@ -16,8 +16,9 @@ public class Const {
     public  final static  String VOLUME = "VOLUME";
     public  final static  String HIGH = "HIGH";
     public  final static  String LOW = "LOW";
-    public final static String SHUANG_HAI = "shanghai";
-    public final static String SHENG_ZHEN = "shengzhen";
+   // public final static String SHUANG_HAI = "shanghai";
+  //  public final static String SHENG_ZHEN = "shengzhen";
+    public final static String ALL_STOCK_INFO = "all";
     public final static String DATE = "DATE";
     public final static int BUY = -1;
     public final static int SELL = 1;

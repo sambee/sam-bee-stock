@@ -21,7 +21,7 @@ public interface IDataProvider {
 	 * @param key
 	 * @throws Exception
 	 */
-	void set(List<Map<String,String>> data, String... key) throws Exception;
+	void setList(List<Map<String,String>> data, String... key) throws Exception;
 	
 	/*
 	 * 

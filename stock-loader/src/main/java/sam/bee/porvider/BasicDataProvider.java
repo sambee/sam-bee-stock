@@ -10,7 +10,7 @@ public class BasicDataProvider implements IDataProvider {
 	/**
 	 * 
 	 */
-	public void set(List<Map<String, String>> values, String... keys)throws Exception{
+	public void setList(List<Map<String, String>> values, String... keys)throws Exception{
 		throw new NotYetImplementedException(this.getClass());
 	};
 
