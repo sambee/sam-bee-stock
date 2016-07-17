@@ -9,5 +9,7 @@ import java.util.Set;
  */
 public interface IStrategy {
 
+    void setMarket(Market market);
+    void setAgent(Agent agent);
     Descition execute(Object content) throws Exception;
 }

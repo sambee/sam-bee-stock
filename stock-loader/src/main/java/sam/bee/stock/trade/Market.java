@@ -147,6 +147,10 @@ public class Market extends Observable  {
 
     public List<Map<String, String>> getHistory(String code, String toDate) throws Exception {
 
+        Map stockInfo = getStock(code);
+        if(stockInfo==null){
+            throw new RuntimeException("Nod found the stock code:'" +code +"'");
+        }
         String name = (String) getStock(code).get(STOCK_NAME);
         String key = code+"-"+name;
         List<Map<String,String>> list;
