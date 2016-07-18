@@ -55,10 +55,10 @@ public class QQRealTimeDataApapter implements IDataAdapter{
 	"CREATED_TIME",	//	30: 时间
 	"CHANGE",	//	31: 涨跌
 	"CHANGE_PERCENT",	//	32: 涨跌%
-	"最高",	//	33: 最高
-	"最低",	//	34: 最低
+	"HIGH",	//	33: 最高
+	"LOW",	//	34: 最低
 	"成交量",	//	35: 价格/成交量（手）/成交额
-	"成交量",	//	36: 成交量（手）
+	"VOLUME",	//	36: 成交量（手）
 	"成交额",	//	37: 成交额（万）
 	"换手率",	//	38: 换手率
 	"市盈率",	//	39: 市盈率

@@ -1,5 +1,6 @@
 package sam.bee.stock.loader.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QQRealTimQuery extends BaseQuery implements ICommand{
@@ -14,6 +15,13 @@ public class QQRealTimQuery extends BaseQuery implements ICommand{
 		this.stockCodeList = stockCodeList;
 		this.adapter =  new QQRealTimeDataApapter();
 		this.loader = new QQHttpLoader();
+	}
+
+	public QQRealTimQuery(String code){
+		stockCodeList = new ArrayList<>();
+		stockCodeList.add(code);
+        this.adapter =  new QQRealTimeDataApapter();
+        this.loader = new QQHttpLoader();
 	}
 	
 	public QQRealTimQuery(QQHttpLoader loader, List<String> stockCodeList, IDataAdapter adapter)

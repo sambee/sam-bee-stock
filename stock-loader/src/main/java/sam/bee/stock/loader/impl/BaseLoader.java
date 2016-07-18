@@ -21,7 +21,7 @@ public abstract class BaseLoader {
 		List<String> list = new ArrayList<String>(0);
 		try {
 			conn =(HttpURLConnection) url.openConnection();
-			conn.setConnectTimeout(120000);
+			conn.setConnectTimeout(10000);
 			in = conn.getInputStream();
 			br = new BufferedReader(new InputStreamReader(in, "GBK"));
 			String tmp = null;
