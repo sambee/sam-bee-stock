@@ -38,7 +38,7 @@ public class SimpleStrategy implements IStrategy{
     int BUY =1,SELL=2;
     int status = BUY;
     @Override
-    public Descition execute(Object arg) throws Exception {
+    public List<Descition>  execute(Object arg) throws Exception {
         String date = (String) arg;
         Map data = getMarket().getCurrentData(code);
 

@@ -159,8 +159,19 @@ public class Market extends Observable  {
             String name = (String) getStock(code).get(STOCK_NAME);
             list = dataProvider.getList(HISTORY, code+"-"+name );
             if(list!=null) {
+                Collections.sort(list, new Comparator<Map<String, String>>() {
+
+                    @Override
+                    public int compare(Map<String, String> o1, Map<String, String> o2) {
+                        String code1 = o1.get("DATE");
+                        String code2 = o2.get("DATE");
+                        return code1.compareTo(code2);
+                    }
+
+                });
                 histories.put(code, list);
             }
+
         }
         List<Map<String,String>> ret = new ArrayList<Map<String, String>>();
         int icDate = getIntDate(toDate);
@@ -168,6 +179,7 @@ public class Market extends Observable  {
             for(Map<String,String> m : list) {
                 String date = m.get(DATE);
                 int iDate = getIntDate(date);
+
                 if (iDate > icDate) {
                     break;
                 }
@@ -186,6 +198,16 @@ public class Market extends Observable  {
 
     public void setHistory(String code, List<Map<String, String>> h) throws Exception {
         histories.put(code, h);
+    }
+
+    public List<Map<String, String>> getAllHistory(String code) throws Exception {
+        List<Map<String,String>> h = histories.get(code);
+        if(h==null){
+            String name = (String) getStock(code).get(STOCK_NAME);
+            h =  dataProvider.getList(HISTORY, code+"-"+name );
+            histories.put(code, h);
+        }
+        return h;
     }
 
     public void order(Agent agent, String stockCode, int buyOrSell, double unit, double price){

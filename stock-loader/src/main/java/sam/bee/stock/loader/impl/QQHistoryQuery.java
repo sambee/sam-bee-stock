@@ -65,6 +65,7 @@ public class QQHistoryQuery extends BaseQuery implements ICommand {
             m.put("LOW",low);
             m.put("HIGH",high);
             m.put("CLOSE",close);
+            m.put("VOLUME", vol);
             return m;
         }
     }
