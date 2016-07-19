@@ -16,7 +16,7 @@ public class LoaderApiImpl implements ILoaderAPI{
 
 	@Override
 	public List<Map<String, String>> getShenZhenStockList() throws IOException {
-		return new GetAllShengZhenStockList().list();
+		return new GetAllShenZhenStockList().list();
 	}
 
 	@Override

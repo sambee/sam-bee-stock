@@ -25,7 +25,7 @@ public class Market extends Observable  {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Set<String> tradeDate = new HashSet<String>();
     Set<String> codes = new HashSet<String>();
-    Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
+     private  Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
 
     private boolean isTrade(){
@@ -40,15 +40,16 @@ public class Market extends Observable  {
     }
 
     public Market() throws Exception {
-        List<Map<String, String>> shanghai =  dataProvider.getList(CODE, ALL_STOCK_INFO);
-
-        for(Map<String,String> m : shanghai){
+        allStockInfos =  dataProvider.getList(CODE, ALL_STOCK_INFO);
+        if(allStockInfos==null){
+            logger.error("Not found any history data, please load them first.");
+            return;
+        }
+        for(Map<String,String> m : allStockInfos){
             codeOrNameMap.put(m.get(STOCK_CODE), m);
             codeOrNameMap.put(m.get(STOCK_NAME), m);
             codes.add(m.get(STOCK_CODE));
         }
-        allStockInfos.addAll(allStockInfos);
-
 
         final String TRADE_CODE = "601398";
         List<Map<String, String>> dl = getHistory(TRADE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
@@ -62,6 +63,10 @@ public class Market extends Observable  {
 
     public List<Map<String,String>> getStockInfos(){
         return allStockInfos;
+    }
+
+    public void setStockInfos(List<Map<String,String>> allStockInfos){
+        this.allStockInfos = allStockInfos;
     }
 
     public String getCurrentDate(){
@@ -145,15 +150,17 @@ public class Market extends Observable  {
         if(stockInfo==null){
             throw new RuntimeException("Nod found the stock code:'" +code +"'");
         }
-        String name = (String) getStock(code).get(STOCK_NAME);
-        String key = code+"-"+name;
+
         List<Map<String,String>> list;
-        if(histories.get(key)!=null){
-            list = histories.get(key);
+        if(histories.get(code)!=null){
+            list = histories.get(code);
         }
         else{
-            list = dataProvider.getList(HISTORY, key );
-            histories.put(key, list);
+            String name = (String) getStock(code).get(STOCK_NAME);
+            list = dataProvider.getList(HISTORY, code+"-"+name );
+            if(list!=null) {
+                histories.put(code, list);
+            }
         }
         List<Map<String,String>> ret = new ArrayList<Map<String, String>>();
         int icDate = getIntDate(toDate);
@@ -177,6 +184,9 @@ public class Market extends Observable  {
         return getHistory(code, currentDate);
     }
 
+    public void setHistory(String code, List<Map<String, String>> h) throws Exception {
+        histories.put(code, h);
+    }
 
     public void order(Agent agent, String stockCode, int buyOrSell, double unit, double price){
 
