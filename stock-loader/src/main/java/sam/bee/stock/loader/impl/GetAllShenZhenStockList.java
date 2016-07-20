@@ -1,10 +1,7 @@
 package sam.bee.stock.loader.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,7 +27,7 @@ public class GetAllShenZhenStockList {
 
 				String STOCK_CODE = line.substring(line.lastIndexOf(" ")+1);
 				String STOCK_NAME = line.substring(0,line.lastIndexOf(" "));
-				map = new HashMap();
+				map = new LinkedHashMap();
 				map.put("STOCK_NAME", STOCK_NAME);
 				map.put("STOCK_CODE", STOCK_CODE);
 				list.add(map);

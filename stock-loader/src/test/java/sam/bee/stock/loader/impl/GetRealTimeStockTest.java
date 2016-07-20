@@ -1,6 +1,5 @@
 package sam.bee.stock.loader.impl;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -9,10 +8,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import sam.bee.stock.loader.BaseTest;
+import sam.bee.stock.loader.BasicTest;
 import sam.bee.stock.loader.ILoaderAPI;
-import sam.bee.stock.loader.impl.QQHttpLoader;
-public class GetRealTimeStockTest extends BaseTest{
+
+public class GetRealTimeStockTest extends BasicTest {
 
 
 	/**

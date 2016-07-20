@@ -2,10 +2,12 @@ package sam.bee.stock.loader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sam.bee.porvider.CSVDataProvider;
+import sam.bee.porvider.IDataProvider;
 
-public abstract class BaseTest {
+public abstract class BasicTest {
 
-	protected static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
+	protected static final Logger logger = LoggerFactory.getLogger(BasicTest.class);
 
 	public String getTestCode(){
 		return "600578";
@@ -26,4 +28,11 @@ public abstract class BaseTest {
 //	public void tearDown() throws Exception {
 //	}
 
+	private IDataProvider dataProvider;
+	public IDataProvider getDataProvider(){
+		if(dataProvider==null){
+			dataProvider = new CSVDataProvider();
+		}
+		return dataProvider;
+	}
 }

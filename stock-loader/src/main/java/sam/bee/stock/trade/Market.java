@@ -1,7 +1,7 @@
 package sam.bee.stock.trade;
 
 import org.slf4j.Logger;
-import sam.bee.porvider.FileDataProvider;
+import sam.bee.porvider.CSVDataProvider;
 import sam.bee.porvider.IDataProvider;
 
 import java.text.ParseException;
@@ -18,7 +18,7 @@ public class Market extends Observable  {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(Market.class);
 
-    IDataProvider dataProvider = new FileDataProvider();
+    IDataProvider dataProvider;
     Map<String, Map<String,String>> codeOrNameMap = new HashMap<String, Map<String, String>>();
     String currentDate = "2015-12-31";
     Calendar calendar = Calendar.getInstance();
@@ -40,7 +40,7 @@ public class Market extends Observable  {
     }
 
     public Market() throws Exception {
-        allStockInfos =  dataProvider.getList(CODE, ALL_STOCK_INFO);
+        allStockInfos =  getDataProvider().getList(CODE, ALL_STOCK_INFO + ".csv");
         if(allStockInfos==null){
             logger.error("Not found any history data, please load them first.");
             return;
@@ -59,6 +59,17 @@ public class Market extends Observable  {
         }
 
         setCurrentDate(currentDate);
+    }
+
+    public IDataProvider getDataProvider() {
+        if(dataProvider==null){
+            dataProvider = new CSVDataProvider();
+        }
+        return dataProvider;
+    }
+
+    public void setDataProvider(IDataProvider dataProvider) {
+        this.dataProvider = dataProvider;
     }
 
     public List<Map<String,String>> getStockInfos(){
@@ -81,7 +92,7 @@ public class Market extends Observable  {
 
     public List<Map<String,String>> getCurrentData() throws Exception {
 
-        List<Map<String,String>>  list  =  dataProvider.getList(INDEX,currentDate );
+        List<Map<String,String>>  list  =  getDataProvider().getList(INDEX,currentDate );
         if(list!=null && list.size()>0){
             return list;
         }
@@ -98,7 +109,7 @@ public class Market extends Observable  {
                 list.add(m);
             }
         }
-        dataProvider.setList(list, INDEX,currentDate );
+        getDataProvider().setList(list, INDEX,currentDate );
         return list;
     }
 
@@ -157,7 +168,7 @@ public class Market extends Observable  {
         }
         else{
             String name = (String) getStock(code).get(STOCK_NAME);
-            list = dataProvider.getList(HISTORY, code+"-"+name );
+            list = getDataProvider().getList(HISTORY, code+"-"+name );
             if(list!=null) {
                 Collections.sort(list, new Comparator<Map<String, String>>() {
 
@@ -204,7 +215,7 @@ public class Market extends Observable  {
         List<Map<String,String>> h = histories.get(code);
         if(h==null){
             String name = (String) getStock(code).get(STOCK_NAME);
-            h =  dataProvider.getList(HISTORY, code+"-"+name );
+            h =  getDataProvider().getList(HISTORY, code+"-"+name );
             histories.put(code, h);
         }
         return h;

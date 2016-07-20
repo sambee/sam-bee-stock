@@ -22,17 +22,14 @@ public class LoaderApiImpl implements ILoaderAPI{
 	@Override
 	public List<Map<String, String>> getRealTimeStockList(List<String> stocks)
 			throws Exception {
-		QQHttpLoader loader = new QQHttpLoader();
-		List<String> actual = loader.get(stocks);
-		QQRealTimeDataApapter adapter = new QQRealTimeDataApapter();
-		return adapter.parse(actual);
+		QQRealTimQuery query = new QQRealTimQuery(stocks);
+		return (List<Map<String, String>>) query.execute();
 	}
 
 	@Override
 	public List<Map<String, String>> getStockHistory(String stockCode) throws Exception {
-		YahooHistoryLoader loader = new YahooHistoryLoader();
-		List<String> list =loader.get(stockCode);
-		return (List<Map<String, String>>) new YahooHistoryDataAdapter().parse(list);
+		QQHistoryQuery qqHistoryQuery = new QQHistoryQuery(stockCode);
+		return (List<Map<String, String>>) qqHistoryQuery.execute();
 	}
 
 }

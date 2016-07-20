@@ -1,33 +1,43 @@
 package sam.bee.stock.loader.impl;
 
 import org.junit.Test;
-import sam.bee.stock.loader.BaseTest;
+import sam.bee.porvider.CSVDataProvider;
+import sam.bee.stock.loader.BasicTest;
 import sam.bee.stock.loader.ILoaderAPI;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GetShangHaiAndShenZhenStockListTest extends BaseTest{
-	
+import static sam.bee.stock.Const.CODE;
+
+public class GetShangHaiAndShenZhenStockListTest extends BasicTest {
+
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() throws Exception {
 		
 		ILoaderAPI api = new LoaderApiImpl();
+		List<Map<String,String>> all = new ArrayList<Map<String,String>>();
 		List<Map<String,String>> list =  api.getShangHaiStockList();
-//		AccessDatabaseCache db = ensureDatabase();
-//		for(Map<String,String> stock : list){
-//			stock.put("STOCK_TYPE", "ss");
-//			db.addRowFromMap(STOCK_TABLE_NAME, (Map<String,Object>)((Object)stock));
-//		}
-//
-//		List<Map<String, Object>> data = db.list(STOCK_TABLE_NAME);
-//		assert(data.size() == list.size());
-//
-//		list =  api.getShenZhenStockList();
-//		for(Map<String,String> stock : list){
-//			stock.put("STOCK_TYPE", "sz");
-//			db.addRowFromMap(STOCK_TABLE_NAME, (Map<String,Object>)((Object)stock));
-//		}
+
+		for(Map<String,String> stock : list){
+			stock.put("STOCK_TYPE", "ss");
+			all.add(stock);
+		}
+
+		list =  api.getShenZhenStockList();
+		for(Map<String,String> stock : list){
+			stock.put("STOCK_TYPE", "sz");
+			all.add(stock);
+		}
+
+		CSVDataProvider provider = new CSVDataProvider();
+
+		provider.setList(all, CODE, "all.csv");
+
+		List<Map<String,String>> lm   = provider.getList(CODE, "all.csv");
+		System.out.println(lm);
 	}
 }

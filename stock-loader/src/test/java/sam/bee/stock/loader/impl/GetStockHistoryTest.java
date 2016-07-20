@@ -8,14 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import sam.bee.stock.loader.BaseTest;
+import sam.bee.stock.loader.BasicTest;
 import sam.bee.stock.loader.ILoaderAPI;
 import sam.bee.porvider.FileDataProvider;
 import sam.bee.porvider.IDataProvider;
 
 import static sam.bee.stock.Const.*;
 
-public class GetStockHistoryTest extends BaseTest{
+public class GetStockHistoryTest extends BasicTest {
 
 
 	private  final static  IDataProvider provider = new FileDataProvider(System.getProperty("user.home") + "/.stocks");

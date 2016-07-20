@@ -1,10 +1,7 @@
 package sam.bee.stock.loader.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +26,7 @@ public class GetAllShangHaiStockList {
 			if(line!=null && line.length()>0){
 				int pos = line.lastIndexOf(" ");
 				//String[] str =line.split(" ");
-				map = new HashMap();
+				map = new LinkedHashMap<>();
 				map.put("STOCK_NAME",line.substring(0, pos).trim());
 				map.put("STOCK_CODE",line.substring(pos).trim());
 				list.add(map);

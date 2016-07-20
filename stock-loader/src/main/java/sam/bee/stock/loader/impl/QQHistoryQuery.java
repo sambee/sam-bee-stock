@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import sam.bee.porvider.JsonHelper;
 import sam.bee.stock.loader.util.FreeMarkerUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/7/19.
@@ -48,7 +45,7 @@ public class QQHistoryQuery extends BaseQuery implements ICommand {
             Map data= (Map) m.get("data");
             Map l = (Map) data.get(loader.mcode);
             List ll = (List) l.get("qfqday");
-            List<Map<String,String>> d = new Vector<>();
+            List<Map<String,String>> d = new LinkedList<>();
             for(int i=0;i<ll.size();i++){
                 List dat = (List) ll.get(i);
                 d.add(m((String)dat.get(0), (String)dat.get(1), (String)dat.get(2), (String)dat.get(3), (String)dat.get(4), (String)dat.get(5)));
@@ -59,7 +56,7 @@ public class QQHistoryQuery extends BaseQuery implements ICommand {
 
 
         private Map m(String date, String open, String close, String high, String low, String vol ){
-            Map m  = new HashMap();
+            Map m  = new LinkedHashMap();
             m.put("DATE",date);
             m.put("OPEN",open);
             m.put("LOW",low);

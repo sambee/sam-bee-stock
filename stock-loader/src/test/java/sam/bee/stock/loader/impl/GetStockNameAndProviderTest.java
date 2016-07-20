@@ -1,9 +1,8 @@
 package sam.bee.stock.loader.impl;
 
 import org.junit.Test;
-import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IDataProvider;
-import sam.bee.stock.loader.BaseTest;
+import sam.bee.porvider.CSVDataProvider;
+import sam.bee.stock.loader.BasicTest;
 import sam.bee.stock.loader.ILoaderAPI;
 
 import java.util.ArrayList;
@@ -12,15 +11,15 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class GetStockNameAndFileCacheTest extends BaseTest{
+public class GetStockNameAndProviderTest extends BasicTest {
 
 	@Test
 	public void test() throws Exception {
 		logger.info(":::::::::: GetStockNameAndFileCacheTest");
 		ILoaderAPI api = new LoaderApiImpl();
-		
 
-		IDataProvider cache = new FileDataProvider("build/stocks/realtime");
+
+		CSVDataProvider cache = new CSVDataProvider("target");
 
 		logger.info("Get shang hai stock list.");
 		List<Map<String,String>> list =  api.getShangHaiStockList();
