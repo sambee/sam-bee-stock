@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static sam.bee.stock.trade.DataUtil.getClose;
 
@@ -38,7 +37,7 @@ public class SimpleStrategy implements IStrategy{
     int BUY =1,SELL=2;
     int status = BUY;
     @Override
-    public List<Descition>  execute(Object arg) throws Exception {
+    public List<Decision>  execute(Object arg) throws Exception {
         String date = (String) arg;
         Map data = getMarket().getCurrentData(code);
 

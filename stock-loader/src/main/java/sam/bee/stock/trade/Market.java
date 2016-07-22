@@ -40,8 +40,8 @@ public class Market extends Observable  {
     }
 
     public Market() throws Exception {
-        allStockInfos =  getDataProvider().getList(CODE, ALL_STOCK_INFO + ".csv");
-        if(allStockInfos==null){
+        allStockInfos =  getDataProvider().getList(CODE, ALL_STOCK_INFO);
+        if(allStockInfos==null || allStockInfos.size()==0){
             logger.error("Not found any history data, please load them first.");
             return;
         }
