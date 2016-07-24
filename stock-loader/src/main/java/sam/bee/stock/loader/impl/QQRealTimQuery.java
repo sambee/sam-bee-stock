@@ -84,7 +84,10 @@ public class QQRealTimQuery extends BaseQuery implements ICommand{
 			Map<String, String> map;
 			for (Object obj : list) {
 				String tmp = (String) obj;
-
+				String endChar = tmp.substring(tmp.length()-1);
+				if("\n".equals(endChar)){
+					tmp = tmp.substring(0, tmp.length()-1);
+				}
 				//logger.debug(tmp);
 
 				String[] values = tmp.replaceAll("\"", "").replaceAll(";", "").split("=");
