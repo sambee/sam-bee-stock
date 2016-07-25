@@ -11,9 +11,9 @@ package sam.bee.stock.loader.impl;
  * please visit http://www.davidflanagan.com/javaexamples3.
  */
 //package je3.nio;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
-import java.io.FileOutputStream;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
 public class HttpGet {
     public String execute(String url) {
         SocketChannel server = null; // Channel for reading from server
-        ByteOutputStream outputStream = null; // Stream to destination file
+        ByteArrayOutputStream outputStream = null; // Stream to destination file
         WritableByteChannel destination; // Channel to write to it
 
         try { // Exception handling and channel closing code follows this block
@@ -85,7 +85,7 @@ public class HttpGet {
             // Finally, we can send this HTTP request to the server.
             server.write(requestBytes);
 
-                outputStream = new ByteOutputStream();
+                outputStream = new ByteArrayOutputStream();
                 // Or wrap a channel around standard out
                 destination = Channels.newChannel(outputStream);
 
