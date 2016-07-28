@@ -23,19 +23,14 @@ public class Market extends Observable  {
     String currentDate = "2015-12-31";
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Set<String> tradeDate = new HashSet<String>();
-    Set<String> codes = new HashSet<String>();
+    //交易日
+    public Set<String> tradeDate = new HashSet<>();
+    public Set<String> codes = new HashSet<String>();
      private  Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
+    public static final String TRADE_DATE_CODE = "601398";
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
 
     private boolean isTrade(){
-        int   week   =   calendar.get(Calendar.DAY_OF_WEEK)-1;
-        final int SUNDAY =0;
-        final int SATURDAY =0;
-
-        if(week==SUNDAY || week==SATURDAY){
-            return true;
-        }
         return tradeDate.contains(currentDate);
     }
 
@@ -51,8 +46,8 @@ public class Market extends Observable  {
             codes.add(m.get(STOCK_CODE));
         }
 
-        final String TRADE_CODE = "601398";
-        List<Map<String, String>> dl = getHistory(TRADE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
+
+        List<Map<String, String>> dl = getHistory(TRADE_DATE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
         String[] sl = getDate(dl);
         for(String s : sl){
             tradeDate.add(s);
@@ -135,6 +130,9 @@ public class Market extends Observable  {
             setChanged();
             notifyObservers(currentDate);
         }
+        else{
+            logger.info(currentDate + "---- 非交易日 ------");
+        }
         return currentDate;
     }
 
@@ -159,7 +157,8 @@ public class Market extends Observable  {
 
         Map stockInfo = getStock(code);
         if(stockInfo==null){
-            throw new RuntimeException("Nod found the stock code:'" +code +"'");
+            logger.error("Nod found the stock code:'" +code +"'");
+            return null;
         }
 
         List<Map<String,String>> list;
