@@ -19,7 +19,7 @@ public class QQHistoryQueryTest extends BasicTest {
     public void test() throws Exception {
         String code = "600103";
         Market m = new Market();
-        Map data = m.getStock(code);
+        Map data = m.getStockInfo(code);
         String name = (String) data.get(STOCK_NAME);
         List l = (List) new QQHistoryQuery(code).execute();
 

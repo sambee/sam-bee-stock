@@ -34,7 +34,8 @@ public class Market extends Observable  {
         return tradeDate.contains(currentDate);
     }
 
-    public Market() throws Exception {
+    private void init(IDataProvider dataProvider) throws Exception {
+        this.dataProvider = dataProvider;
         allStockInfos =  getDataProvider().getList(CODE, ALL_STOCK_INFO);
         if(allStockInfos==null || allStockInfos.size()==0){
             logger.error("Not found any history data, please load them first.");
@@ -55,10 +56,18 @@ public class Market extends Observable  {
 
         setCurrentDate(currentDate);
     }
+    public Market(IDataProvider dataProvider) throws Exception {
+        init(dataProvider);
+    }
+
+    public Market() throws Exception {
+        this.dataProvider = new CSVDataProvider();
+        init(dataProvider);
+    }
 
     public IDataProvider getDataProvider() {
         if(dataProvider==null){
-            dataProvider = new CSVDataProvider();
+            throw new NullPointerException("data provider is null");
         }
         return dataProvider;
     }
@@ -113,7 +122,7 @@ public class Market extends Observable  {
     }
 
 
-    public Map getStock(String code){
+    public Map getStockInfo(String code){
         return codeOrNameMap.get(code);
     }
 
@@ -155,7 +164,7 @@ public class Market extends Observable  {
 
     public List<Map<String, String>> getHistory(String code, String toDate) throws Exception {
 
-        Map stockInfo = getStock(code);
+        Map stockInfo = getStockInfo(code);
         if(stockInfo==null){
             logger.error("Nod found the stock code:'" +code +"'");
             return null;
@@ -166,7 +175,7 @@ public class Market extends Observable  {
             list = histories.get(code);
         }
         else{
-            String name = (String) getStock(code).get(STOCK_NAME);
+            String name = (String) getStockInfo(code).get(STOCK_NAME);
             list = getDataProvider().getList(HISTORY, code+"-"+name );
             if(list!=null) {
                 Collections.sort(list, new Comparator<Map<String, String>>() {
@@ -213,7 +222,7 @@ public class Market extends Observable  {
     public List<Map<String, String>> getAllHistory(String code) throws Exception {
         List<Map<String,String>> h = histories.get(code);
         if(h==null){
-            String name = (String) getStock(code).get(STOCK_NAME);
+            String name = (String) getStockInfo(code).get(STOCK_NAME);
             h =  getDataProvider().getList(HISTORY, code+"-"+name );
             histories.put(code, h);
         }
