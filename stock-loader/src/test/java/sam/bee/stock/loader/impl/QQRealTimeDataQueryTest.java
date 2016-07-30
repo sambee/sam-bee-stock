@@ -1,7 +1,5 @@
 package sam.bee.stock.loader.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +30,16 @@ public class QQRealTimeDataQueryTest {
 		codeList.add("000157");
 		codeList.add("000001");
 
-		QQRealTimQuery stockQuery = new QQRealTimQuery(codeList);
-		List<Map<String, String>> list  = (List<Map<String, String>>)stockQuery.execute();
+		for(String code : codeList) {
+			QQRealTimLoader stockQuery = new QQRealTimLoader(code);
+			List<Map<String, String>> list = (List<Map<String, String>>) stockQuery.execute();
 
 
-		System.out.println(String.format("%6sCode|%6s名字|　当前价格|成交量(手)|   　 今开|    总市值","",""));
+			System.out.println(String.format("%6sCode|%6s名字|　当前价格|成交量(手)|   　 今开|    总市值", "", ""));
 
-		for(Map<String,String> map :list){
-			echo(temp, map);
+			for (Map<String, String> map : list) {
+				echo(temp, map);
+			}
 		}
 	}
 

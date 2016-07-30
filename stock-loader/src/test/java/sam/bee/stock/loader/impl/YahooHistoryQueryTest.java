@@ -14,7 +14,7 @@ public class YahooHistoryQueryTest {
 	@Test
 	public void test() throws Exception {
 		String code = "000713";
-		YahooHistoryQuery query = new YahooHistoryQuery(code);
+		YahooHistoryLoader query = new YahooHistoryLoader(code);
 		List<Map<String,String>> list = (List<Map<String,String>>)query.execute();
 		Collections.sort(list, new  Comparator<Map<String,String>>(){
 

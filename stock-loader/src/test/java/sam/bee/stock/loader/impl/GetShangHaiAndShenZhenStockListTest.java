@@ -20,16 +20,10 @@ public class GetShangHaiAndShenZhenStockListTest extends BasicTest {
 		
 		ILoaderAPI api = new LoaderApiImpl();
 		List<Map<String,String>> all = new ArrayList<Map<String,String>>();
-		List<Map<String,String>> list =  api.getShangHaiStockList();
+		List<Map<String,String>> list =  api.getAllStockInfoList();
 
 		for(Map<String,String> stock : list){
 			stock.put("STOCK_TYPE", "ss");
-			all.add(stock);
-		}
-
-		list =  api.getShenZhenStockList();
-		for(Map<String,String> stock : list){
-			stock.put("STOCK_TYPE", "sz");
 			all.add(stock);
 		}
 

@@ -22,18 +22,9 @@ public class GetStockNameAndProviderTest extends BasicTest {
 		CSVDataProvider cache = new CSVDataProvider("target");
 
 		logger.info("Get shang hai stock list.");
-		List<Map<String,String>> list =  api.getShangHaiStockList();
-		cache.setList(list, "shuanghai");
+		List<Map<String,String>> list =  api.getAllStockInfoList();
 
-		List<Map<String,String>> actual = cache.getList("shuanghai");
-		validate(list, actual);
 
-		logger.info("Get sheng zhen stock list.");
-		list =  api.getShenZhenStockList();
-		cache.setList(list, "shengzhen");
-		
-		actual = cache.getList("shengzhen");
-		validate(list, actual);
 
 		logger.info("------------- DONE ---------");
 	}
@@ -59,14 +50,4 @@ public class GetStockNameAndProviderTest extends BasicTest {
 		return list;
 	}
 	
-//	private AccessDatabaseCache getDatabase(File dbFile) throws Exception{
-////		if(dbFile.exists()){
-////			dbFile.delete();
-////		}
-//
-//		//create access file.
-//		return new AccessDatabaseCache(dbFile);
-//	}
-	
-
 }

@@ -21,7 +21,7 @@ public class QQHistoryQueryTest extends BasicTest {
         Market m = new Market();
         Map data = m.getStockInfo(code);
         String name = (String) data.get(STOCK_NAME);
-        List l = (List) new QQHistoryQuery(code).execute();
+        List l = (List) new QQHistoryLoader(code).execute();
 
 
         getDataProvider().setList(l, HISTORY, code+"-"+name + ".csv");

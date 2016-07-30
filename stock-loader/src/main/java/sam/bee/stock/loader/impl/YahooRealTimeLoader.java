@@ -32,10 +32,8 @@ public class YahooRealTimeLoader extends BaseLoader{
 //		Ø  月份是从0开始的，如9月数据，则写为08。
 //	http://heipark.iteye.com/blog/1423812
 	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\") >${code}.sz<#else>${code}.sh</#if>&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d";
-
-	@Override
-	protected List<String> get(Object... params) throws Exception {
-		String url = FreeMarkerUtils.convert(URL, "code", (String)params[0]);		
+	protected String get(String code) throws Exception {
+		String url = FreeMarkerUtils.convert(URL, "code", code);
 		return getResponse(url);
 	}
 

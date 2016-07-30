@@ -11,23 +11,16 @@ public interface ILoaderAPI {
 	 * 
 	 * @return
 	 */
-	List<Map<String, String>> getShangHaiStockList() throws Exception;
+	List<Map<String, String>> getAllStockInfoList() throws Exception;
 	
+
 	/**
 	 * 
-	 * get all stock code and stock names.
-	 * 
-	 * @return
-	 */
-	List<Map<String, String>> getShenZhenStockList() throws Exception;
-	
-	/**
-	 * 
-	 * @param stocks
+	 * @param code
 	 * @return
 	 * @throws Exception
 	 */
-	List<Map<String, String>> getRealTimeStockList(List<String> stocks) throws Exception;
+	List<Map<String, String>> getRealTimeStockList(String code) throws Exception;
 
 
 	/**

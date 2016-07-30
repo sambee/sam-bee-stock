@@ -35,7 +35,7 @@ public class GetStockHistoryTest extends BasicTest {
 		ILoaderAPI loader = new LoaderApiImpl();
 		List<Map<String,String>> stockList = provider.getList(CODE, ALL_STOCK_INFO);
 		if(stockList==null){
-			stockList =  loader.getShangHaiStockList();
+			stockList =  loader.getAllStockInfoList();
 			provider.setList(stockList, CODE, ALL_STOCK_INFO);
 		}
 
@@ -47,19 +47,6 @@ public class GetStockHistoryTest extends BasicTest {
 			tasks.add(new Task(stockCode,stockName, provider,loader));
 		}
 		
-
-		stockList = provider.getList(CODE, ALL_STOCK_INFO);
-		if(stockList==null){
-			stockList =  loader.getShenZhenStockList();
-			provider.setList(stockList, CODE,ALL_STOCK_INFO);
-		}
-
-		//load shengzhen  stock history data.
-		for(Map<String,String> m : stockList){
-			String stockCode = m.get("STOCK_CODE");
-			String stockName = m.get("STOCK_NAME");
-			tasks.add(new Task(stockCode,stockName, provider,loader));
-		}
 
 
 		for(Task t : tasks){

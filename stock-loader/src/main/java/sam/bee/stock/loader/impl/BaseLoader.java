@@ -11,9 +11,7 @@ import java.util.Vector;
 
 public abstract class BaseLoader {
 
-	protected abstract List<String> get(Object... params) throws Exception;
-
-//	protected List<String> getResponseBlock(String request) throws IOException {
+	//	protected List<String> getResponseBlock(String request) throws IOException {
 //		HttpURLConnection conn = null;
 //		InputStream in = null;
 //		BufferedReader br = null;
@@ -84,20 +82,14 @@ public abstract class BaseLoader {
 //		return null;
 //	}
 	OkHttpClient client = new OkHttpClient();
-	public List<String> getResponse(String url) throws IOException, URISyntaxException {
+	public String getResponse(String url) throws IOException, URISyntaxException {
 //		String data = new HttpGet().execute(request);
 //		System.out.print(data);
-
-
 		Request request = new Request.Builder()
 				.url(url)
 				.build();
 
 		Response response = client.newCall(request).execute();
-		String data = response.body().string();
-
-		List<String> v = new Vector<>();
-		v.add(data);
-		return v;
+		return response.body().string();
 	}
 }
