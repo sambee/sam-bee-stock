@@ -13,7 +13,7 @@ import java.util.*;
 public class QQHistoryLoader extends BaseLoader implements ILoader {
 
     protected static final Logger logger = LoggerFactory.getLogger(QQHistoryLoader.class);
-    String code;
+
 
     String mCode;
     //public  String URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayhfq&param=sh600103,day,1998-01-01,1998-12-31,320,hfq&r=0.444157593883574";
@@ -64,13 +64,12 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
         return m;
     }
 
-    public QQHistoryLoader(String code){
-        this.code = code;
+    public QQHistoryLoader(){
         throw new RuntimeException("wrong data for web.ifzq.gtimg.cn");
     }
 
     @Override
-    public List<Map<String,String>>  execute() throws Exception {
+    public List<Map<String,String>>  execute(String code) throws Exception {
         String dataStr = get(code);
         logger.info(dataStr);
         return parse(dataStr);
@@ -78,7 +77,7 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
     }
 
     public static void main(String[] args) throws Exception {
-        List l = (List) new QQHistoryLoader("600103").execute();
+        List l = (List) new QQHistoryLoader().execute("600103");
         System.out.println(l);
 
     }

@@ -19,21 +19,21 @@ public class Market extends Observable  {
     Logger logger = org.slf4j.LoggerFactory.getLogger(Market.class);
 
     IDataProvider dataProvider;
-    Map<String, Map<String,String>> codeOrNameMap = new HashMap<String, Map<String, String>>();
+    public Map<String, Map<String,String>> codeOrNameMap = new HashMap<String, Map<String, String>>();
     String currentDate;
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     //交易日
     public Set<String> tradeDate = new HashSet<>();
     public Set<String> codes = new HashSet<String>();
-     private  Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
+    public  Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
     public static final String TRADE_DATE_CODE = "601398";
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
-    int historyLength = 640;
 
 
-    private void init(IDataProvider dataProvider) throws Exception {
-        this.dataProvider = dataProvider;
+
+    public void init() throws Exception {
+
         currentDate = dateFormat.format(new Date());
         allStockInfos =  getDataProvider().getList(CODE, ALL_STOCK_INFO);
         if(allStockInfos==null || allStockInfos.size()==0){
@@ -54,11 +54,13 @@ public class Market extends Observable  {
         setCurrentDate(currentDate);
     }
     public Market(IDataProvider dataProvider) throws Exception {
-        init(dataProvider);
+        this.dataProvider = dataProvider;
+        init();
     }
 
     public Market() throws Exception {
-        init(new CSVDataProvider());
+        this.dataProvider = new CSVDataProvider();
+        init();
     }
 
     public IDataProvider getDataProvider() {
@@ -176,7 +178,7 @@ public class Market extends Observable  {
         }
         else{
             String name = (String) getStockInfo(code).get(STOCK_NAME);
-            list = getDataProvider().getList(historyLength, HISTORY, code+"-"+name );
+            list = getDataProvider().getList(HISTORY, code+"-"+name );
             if(list!=null) {
                 Collections.sort(list, new Comparator<Map<String, String>>() {
 
@@ -215,8 +217,19 @@ public class Market extends Observable  {
         return getHistory(code, currentDate);
     }
 
-    public void setHistory(String code, List<Map<String, String>> h) throws Exception {
-        histories.put(code, h);
+    public synchronized  void setHistory(String code, List<Map<String, String>> history) throws Exception {
+        histories.remove(code);
+        Collections.sort(history, new Comparator<Map<String, String>>() {
+
+            @Override
+            public int compare(Map<String, String> o1, Map<String, String> o2) {
+                String code1 = o1.get("DATE");
+                String code2 = o2.get("DATE");
+                return code1.compareTo(code2);
+            }
+
+        });
+        histories.put(code, history);
     }
 
     public List<Map<String, String>> getAllHistory(String code) throws Exception {

@@ -23,20 +23,20 @@ public class GetAllStockInfoList {
 	private List<Map<String,String>> parseSS(Vector<Map<String,String>> v, Document doc) throws IOException{
 
 //      Document doc = Jsoup.parse(input, "UTF-8", "");
-		Elements  els = doc.select("div.bbsilst_wei3");
-		
-		assert(els.size()==3);
-		Elements shuanghai = els.get(0).select("a");
+		Elements  els = doc.select("div[id=quotesearch]");
+
+
+		Elements shuanghai = els.first().select("ul li");
 		Map<String,String> map;
 		
 		for(int i=0; i<shuanghai.size(); i++){
 			String line = shuanghai.get(i).text();
 			if(line!=null && line.length()>0){
-				int pos = line.lastIndexOf(" ");
+				int pos = line.lastIndexOf("(");
 				//String[] str =line.split(" ");
 				map = new LinkedHashMap<>();
+				map.put("STOCK_CODE",line.substring(pos+1, line.length()-1).trim());
 				map.put("STOCK_NAME",line.substring(0, pos).trim());
-				map.put("STOCK_CODE",line.substring(pos).trim());
 				map.put("STOCK_TYPE","ss");
 				v.add(map);
 			}
@@ -49,21 +49,18 @@ public class GetAllStockInfoList {
 
 	private List<Map<String,String>> parseSZ(Vector<Map<String,String>> v, Document doc) throws IOException{
 //      Document doc = Jsoup.parse(input, "UTF-8", "");
-		Elements  els = doc.select("div.bbsilst_wei3");
+		Elements  els = doc.select("div[id=quotesearch]");
 
-		assert(els.size()==3);
-		Elements shenzhen = els.get(1).select("a");
+		Elements shuanghai = els.first().select("ul li");
 		Map<String,String> map;
 
-		for(int i=0; i<shenzhen.size(); i++){
-			String line = shenzhen.get(i).text().trim();
+		for(int i=0; i<shuanghai.size(); i++){
+			String line = shuanghai.get(i).text().trim();
 			if(line!=null && line.length()>0){
-
-				String STOCK_CODE = line.substring(line.lastIndexOf(" ")+1);
-				String STOCK_NAME = line.substring(0,line.lastIndexOf(" "));
+				int pos = line.lastIndexOf("(");
 				map = new LinkedHashMap();
-				map.put("STOCK_NAME", STOCK_NAME);
-				map.put("STOCK_CODE", STOCK_CODE);
+				map.put("STOCK_CODE",line.substring(pos+1, line.length()-1).trim());
+				map.put("STOCK_NAME",line.substring(0, pos).trim());
 				map.put("STOCK_TYPE","sz");
 				v.add(map);
 			}

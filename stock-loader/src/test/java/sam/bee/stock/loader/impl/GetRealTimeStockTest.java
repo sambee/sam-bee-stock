@@ -24,7 +24,7 @@ public class GetRealTimeStockTest extends BasicTest {
 
 		String code = "";
 
-		List<Map<String, String>> stockList = new 	QQRealTimLoader(code).execute();
+		List<Map<String, String>> stockList = new 	QQRealTimLoader().execute(code);
 
 
 	}

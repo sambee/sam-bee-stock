@@ -1,5 +1,8 @@
 package sam.bee.porvider;
 
+import org.slf4j.Logger;
+import sam.bee.stock.trade.strategy.App;
+
 import java.io.*;
 import java.util.*;
 
@@ -8,7 +11,7 @@ import java.util.*;
  */
 public class CSVDataProvider implements IDataProvider{
     File base = null;
-
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(CSVDataProvider.class);
     /**
      *
      * @param fileSpace
@@ -26,9 +29,32 @@ public class CSVDataProvider implements IDataProvider{
      */
     @Override
     public void set(String allJson, String... keys) throws IOException {
-        throw new RuntimeException("Not yet implement");
+        File outFile = new File(base, join(File.separator,keys));
+        ByteArrayInputStream in = new ByteArrayInputStream(allJson.getBytes());
+        if(!outFile.getParentFile().exists()){
+            if(!outFile.getParentFile().mkdirs()){
+                throw new RuntimeException("Not create directory:"+ outFile.getParentFile().getAbsolutePath());
+            }
+        }
+        FileOutputStream out = new FileOutputStream(outFile);
+        writeAndClose(in, out);
     };
 
+    public void writeAndClose(InputStream in, OutputStream out) throws IOException{
+        try{
+            byte[] buffer = new byte[1024];
+            int len = in.read(buffer);
+            while (len != -1) {
+                out.write(buffer, 0, len);
+                len = in.read(buffer);
+            }
+        }
+        finally{
+            in.close();
+            out.close();
+        }
+
+    };
 
     @Override
     public  String getString(String... key) throws IOException{
@@ -57,6 +83,9 @@ public class CSVDataProvider implements IDataProvider{
     @Override
     public void setList(List<Map<String, String>> values, String... keys)
             throws Exception {
+        if(values==null || values.size()==0){
+            return;
+        }
         Map<String, String> map = values.get(0);
         StringBuilder header = new StringBuilder();
         for(String v : map.keySet()){
@@ -68,6 +97,10 @@ public class CSVDataProvider implements IDataProvider{
         OutputStreamWriter w = null ;
 
         try {
+            if(!outFile.getParentFile().exists()){
+                outFile.getParentFile().mkdirs();
+                logger.info("build the directory:" + outFile.getParentFile().getCanonicalPath());
+            }
             w = new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8");
             w.write(header.toString());
 
@@ -141,7 +174,7 @@ public class CSVDataProvider implements IDataProvider{
 
         try {
             if(!file.exists()){
-                System.err.println("Not found the file." + file.getCanonicalPath());
+                logger.info("Not found the file." + file.getCanonicalPath());
                 return l;
             }
             in=new InputStreamReader(new FileInputStream(file), "UTF-8");
@@ -176,8 +209,8 @@ public class CSVDataProvider implements IDataProvider{
 
 
     @Override
-    public boolean exist(String... key) {
-        throw new RuntimeException("Not yet implement");
+    public boolean exist(String... keys) {
+       return new File(base, join(File.separator,keys)).exists();
     }
 
 

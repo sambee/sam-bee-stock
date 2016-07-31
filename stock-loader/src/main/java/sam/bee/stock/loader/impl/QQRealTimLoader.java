@@ -4,6 +4,8 @@ import sam.bee.stock.loader.util.FreeMarkerUtils;
 
 import java.util.*;
 
+import static sam.bee.stock.Const.DATE;
+
 /**
  * QQSimpleStockInfoLoader.java
  *
@@ -36,11 +38,8 @@ import java.util.*;
 public class QQRealTimLoader extends BaseLoader implements ILoader {
 
 
-    private String code;
 
-    public QQRealTimLoader(String code) {
-        this.code = code;
-
+    public QQRealTimLoader() {
     }
 
 //	private static final String[] FIELDS = {
@@ -132,6 +131,12 @@ public class QQRealTimLoader extends BaseLoader implements ILoader {
 
         }
 
+        String createdTime = map.get("CREATED_TIME");
+        if(createdTime==null){
+            return null;
+        }
+        String date =  createdTime.substring(0,4)+"-"+createdTime.substring(4,6)+"-"+createdTime.substring(6,8);
+        map.put(DATE, date);
         ret.add(map);
         return ret;
     }
@@ -151,7 +156,7 @@ public class QQRealTimLoader extends BaseLoader implements ILoader {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Map<String, String>> execute() throws Exception {
+    public List<Map<String, String>> execute(String code) throws Exception {
         {
             String str = get(code);
             return parse(str);

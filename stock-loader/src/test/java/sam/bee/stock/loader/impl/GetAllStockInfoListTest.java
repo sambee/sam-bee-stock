@@ -8,29 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static sam.bee.stock.Const.ALL_STOCK_INFO;
 import static sam.bee.stock.Const.CODE;
 
-public class GetShangHaiAndShenZhenStockListTest extends BasicTest {
+public class GetAllStockInfoListTest extends BasicTest {
 
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() throws Exception {
-		
-
-		List<Map<String,String>> all = new ArrayList<Map<String,String>>();
 		List<Map<String,String>> list =  new GetAllStockInfoList().load();
-
-		for(Map<String,String> stock : list){
-			stock.put("STOCK_TYPE", "ss");
-			all.add(stock);
-		}
 
 		CSVDataProvider provider = new CSVDataProvider();
 
-		provider.setList(all, CODE, "all.csv");
+		provider.setList(list, CODE, ALL_STOCK_INFO);
 
-		List<Map<String,String>> lm   = provider.getList(CODE, "all.csv");
+		List<Map<String,String>> lm   = provider.getList(CODE, ALL_STOCK_INFO);
 		System.out.println(lm);
 	}
 }

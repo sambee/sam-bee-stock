@@ -11,8 +11,6 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 
 	protected static final Logger logger = LoggerFactory.getLogger(sam.bee.stock.loader.impl.YahooHistoryLoader.class);
 
-	String code;
-
 	//http://ichart.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2014&g=d
 		//•http://ichart.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d
 		//•http://table.finance.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d
@@ -61,8 +59,9 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 //	http://heipark.iteye.com/blog/1423812
 //	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >${code}.sz<#else>${code}.SS</#if>";
 
-	private final static String URL_TEMP = "http://table.finance.yahoo.com/table.csv?s=${code}&a=${startMonth}&b=${startDay}&c=${startYear}&d=${toMonth}&e=${toDay}&f=${toYear}&g=d&ignore=.csv";
-
+	private final static String URL_TEMP_2 = "http://table.finance.yahoo.com/table.csv?s=${code}&a=${startMonth}&b=${startDay}&c=${startYear}&d=${toMonth}&e=${toDay}&f=${toYear}&g=d&ignore=.csv";
+	private final static String URL_TEMP_1 = "http://table.finance.yahoo.com/table.csv?s=${code}";
+	private String URL_TEMP;
 	private String parseCode(String code){
 		if(code.startsWith("0") || code.startsWith("3")){
 			return code +".sz";
@@ -132,27 +131,27 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 	private static final SimpleDateFormat  f  = new SimpleDateFormat("yyyy-MM-dd");
 	private String startDate;
 	private String toDate;
-	public YahooHistoryLoader(String code) {
-		this.code = code;
+	public YahooHistoryLoader() {
+		this.URL_TEMP = URL_TEMP_1;
 		this.startDate = "1990-01-01";
 		this.toDate = f.format(new Date());
 	}
 
-	public YahooHistoryLoader(String code, String startDate, String toDate) {
-		this.code = code;
+	public YahooHistoryLoader(String startDate, String toDate) {
 		this.startDate = startDate;
 		this.toDate = toDate;
+		this.URL_TEMP = URL_TEMP_2;
 	}
 
-	public YahooHistoryLoader(String code, String startDate) {
-		this.code = code;
+	public YahooHistoryLoader(String startDate) {
 		this.startDate = startDate;
 		this.toDate = f.format(new Date());
+		this.URL_TEMP = URL_TEMP_2;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String,String>>  execute() throws Exception {
+	public List<Map<String,String>>  execute(String code) throws Exception {
 		String data = get(code, startDate, toDate);
 		if(data!=null) {
 			return parse(data);

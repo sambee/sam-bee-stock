@@ -11,6 +11,7 @@ public class Const {
     public  final static  String INDEX = "index";
     public  final static  String STOCK_CODE = "STOCK_CODE";
     public  final static  String STOCK_NAME = "STOCK_NAME";
+    public  final static  String STOCK_TYPE = "STOCK_TYPE";
     public  final static  String OPEN = "OPEN";
     public  final static  String CLOSE = "CLOSE";
     public  final static  String VOLUME = "VOLUME";
