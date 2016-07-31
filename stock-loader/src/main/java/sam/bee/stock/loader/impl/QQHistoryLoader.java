@@ -66,6 +66,7 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
 
     public QQHistoryLoader(String code){
         this.code = code;
+        throw new RuntimeException("wrong data for web.ifzq.gtimg.cn");
     }
 
     @Override

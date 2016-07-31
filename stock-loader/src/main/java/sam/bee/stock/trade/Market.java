@@ -20,22 +20,21 @@ public class Market extends Observable  {
 
     IDataProvider dataProvider;
     Map<String, Map<String,String>> codeOrNameMap = new HashMap<String, Map<String, String>>();
-    String currentDate = "2015-12-31";
+    String currentDate;
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     //交易日
-    public List<String> tradeDate = new ArrayList<>();
+    public Set<String> tradeDate = new HashSet<>();
     public Set<String> codes = new HashSet<String>();
      private  Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
     public static final String TRADE_DATE_CODE = "601398";
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
+    int historyLength = 640;
 
-    private boolean isTradeDate(){
-        return tradeDate.contains(currentDate);
-    }
 
     private void init(IDataProvider dataProvider) throws Exception {
         this.dataProvider = dataProvider;
+        currentDate = dateFormat.format(new Date());
         allStockInfos =  getDataProvider().getList(CODE, ALL_STOCK_INFO);
         if(allStockInfos==null || allStockInfos.size()==0){
             logger.error("Not found any history data, please load them first.");
@@ -47,13 +46,11 @@ public class Market extends Observable  {
             codes.add(m.get(STOCK_CODE));
         }
 
-
-        List<Map<String, String>> dl = getHistory(TRADE_DATE_CODE, dateFormat.format(new Date(System.currentTimeMillis())));
+        List<Map<String, String>> dl = getHistory(TRADE_DATE_CODE, currentDate);
         String[] sl = getDate(dl);
         for(String s : sl){
             tradeDate.add(s);
         }
-
         setCurrentDate(currentDate);
     }
     public Market(IDataProvider dataProvider) throws Exception {
@@ -61,8 +58,7 @@ public class Market extends Observable  {
     }
 
     public Market() throws Exception {
-        this.dataProvider = new CSVDataProvider();
-        init(dataProvider);
+        init(new CSVDataProvider());
     }
 
     public IDataProvider getDataProvider() {
@@ -130,18 +126,22 @@ public class Market extends Observable  {
         return Integer.valueOf(date.replaceAll("-", ""));
     }
 
+    private boolean isTradeDate(){
+        return tradeDate.contains(currentDate);
+    }
+
     public String next(){
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         String date  = dateFormat.format(calendar.getTime());
 
         currentDate = date;
-//        if(isTrade()) {
+        if(isTradeDate()) {
             setChanged();
             notifyObservers(currentDate);
-//        }
-//        else{
-//            logger.info(currentDate + "---- 非交易日 ------");
-//        }
+        }
+        else{
+            logger.info(currentDate + "---- 非交易日 ------");
+        }
         return currentDate;
     }
 
@@ -176,7 +176,7 @@ public class Market extends Observable  {
         }
         else{
             String name = (String) getStockInfo(code).get(STOCK_NAME);
-            list = getDataProvider().getList(HISTORY, code+"-"+name );
+            list = getDataProvider().getList(historyLength, HISTORY, code+"-"+name );
             if(list!=null) {
                 Collections.sort(list, new Comparator<Map<String, String>>() {
 
