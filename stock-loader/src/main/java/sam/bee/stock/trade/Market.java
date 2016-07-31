@@ -24,7 +24,7 @@ public class Market extends Observable  {
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     //交易日
-    public Set<String> tradeDate = new HashSet<>();
+    public List<String> tradeDate = new ArrayList<>();
     public Set<String> codes = new HashSet<String>();
      private  Map<String, List<Map<String, String>>> histories = new HashMap<String, List<Map<String, String>>>();
     public static final String TRADE_DATE_CODE = "601398";
@@ -135,13 +135,13 @@ public class Market extends Observable  {
         String date  = dateFormat.format(calendar.getTime());
 
         currentDate = date;
-        if(isTrade()) {
+//        if(isTrade()) {
             setChanged();
             notifyObservers(currentDate);
-        }
-        else{
-            logger.info(currentDate + "---- 非交易日 ------");
-        }
+//        }
+//        else{
+//            logger.info(currentDate + "---- 非交易日 ------");
+//        }
         return currentDate;
     }
 

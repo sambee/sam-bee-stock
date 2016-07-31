@@ -40,6 +40,7 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >${code}.sz<#else>${code}.SS</#if>";
 	protected String get(String code) throws Exception {
 			String url = FreeMarkerUtils.convert(URL, "code", code);
+		logger.info(url);
 			return getResponse(url);
 		}
 
@@ -60,6 +61,20 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 				}
 				v.add(map);
 			}
+//			Collections.sort(v, new Comparator<Map<String, String>>() {
+//
+//				@Override
+//				public int compare(Map<String, String> o1, Map<String, String> o2) {
+//					String code1 = o1.get("DATE");
+//					String code2 = o2.get("DATE");
+//					if(code1!=null && code2!=null) {
+//						return code1.compareTo(code2);
+//					}
+//					logger.error(o1 + " "+ o2);
+//					throw new NullPointerException("Not found date");
+//				}
+//
+//			});
 			return v;
 		}
 
@@ -72,6 +87,9 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 	@Override
 	public List<Map<String,String>>  execute() throws Exception {
 		String data = get(code);
-		return parse(data);
+		if(data!=null) {
+			return parse(data);
+		}
+		return null;
 	}
 }

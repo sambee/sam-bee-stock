@@ -90,6 +90,12 @@ public abstract class BaseLoader {
 				.build();
 
 		Response response = client.newCall(request).execute();
-		return response.body().string();
+		if(response.isSuccessful()) {
+			return response.body().string();
+		}
+		else{
+			response.body().close();
+		}
+		return null;
 	}
 }
