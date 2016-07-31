@@ -13,7 +13,7 @@ import static sam.bee.stock.Const.STOCK_NAME;
 /**
  * Created by Administrator on 2016/7/21.
  */
-public class QQHistoryQueryTest extends BasicTest {
+public class QQHistoryLoaderTest extends BasicTest {
 
     @Test
     public void test() throws Exception {
@@ -22,9 +22,7 @@ public class QQHistoryQueryTest extends BasicTest {
         Map data = m.getStockInfo(code);
         String name = (String) data.get(STOCK_NAME);
         List l = (List) new QQHistoryLoader(code).execute();
-
-
-        getDataProvider().setList(l, HISTORY, code+"-"+name + ".csv");
+        getDataProvider().setList(l, HISTORY, code+"-"+name);
         System.out.println(l);
     }
 }

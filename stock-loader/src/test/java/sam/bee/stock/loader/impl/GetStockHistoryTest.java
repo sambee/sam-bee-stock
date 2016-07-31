@@ -1,17 +1,15 @@
 package sam.bee.stock.loader.impl;
 
+import org.junit.Test;
+import sam.bee.porvider.FileDataProvider;
+import sam.bee.porvider.IDataProvider;
+import sam.bee.stock.loader.BasicTest;
+
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.junit.Test;
-
-import sam.bee.stock.loader.BasicTest;
-import sam.bee.stock.loader.ILoaderAPI;
-import sam.bee.porvider.FileDataProvider;
-import sam.bee.porvider.IDataProvider;
 
 import static sam.bee.stock.Const.*;
 
@@ -32,10 +30,10 @@ public class GetStockHistoryTest extends BasicTest {
 		ExecutorService executorService =Executors.newFixedThreadPool(cpuNums * POOL_SIZE);
 		
 		
-		ILoaderAPI loader = new LoaderApiImpl();
+
 		List<Map<String,String>> stockList = provider.getList(CODE, ALL_STOCK_INFO);
 		if(stockList==null){
-			stockList =  loader.getAllStockInfoList();
+			stockList =  new GetAllStockInfoList().load();
 			provider.setList(stockList, CODE, ALL_STOCK_INFO);
 		}
 
@@ -44,7 +42,7 @@ public class GetStockHistoryTest extends BasicTest {
 		for(Map<String,String> m : stockList){
 			String stockCode = m.get("STOCK_CODE");
 			String stockName = m.get("STOCK_NAME");
-			tasks.add(new Task(stockCode,stockName, provider,loader));
+			tasks.add(new Task(stockCode,stockName, provider));
 		}
 		
 
@@ -78,15 +76,14 @@ public class GetStockHistoryTest extends BasicTest {
 
 		public String code;
 		IDataProvider cache;
-		ILoaderAPI loader;
+
 		public String name;
 
 
 
-		public Task(String code, String name, IDataProvider cache, ILoaderAPI loader){
+		public Task(String code, String name, IDataProvider cache){
 			this.code = code;
 			this.cache = cache;
-			this.loader = loader;
 			this.name = name;
 			
 		}
@@ -96,7 +93,7 @@ public class GetStockHistoryTest extends BasicTest {
 			List<Map<String, String>> list;
 			try {
 				//log.info("Load stock:" +  stockCode);
-				list = (List<Map<String,String>>)loader.getStockHistory(code);
+				list = new YahooHistoryLoader(code).execute();
 				Collections.sort(list, new  Comparator<Map<String,String>>(){
 
 					@Override

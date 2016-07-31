@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sam.bee.stock.loader.util.FreeMarkerUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class YahooHistoryLoader extends BaseLoader implements ILoader {
@@ -16,6 +17,25 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 		//•http://ichart.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d
 		//•http://table.finance.yahoo.com/table.csv?s=600000.SS&a=08&b=25&c=2010&d=09&e=8&f=2010&g=d
 //	http://ichart.yahoo.com/table.csv?s=string&a=int&b=int&c=int&d=int&e=int&f=int&g=d&ignore=.csv
+
+
+//	1、通过API获取实时数据
+//
+//			请求地址
+//
+//	http://finance.yahoo.com/d/quotes.csv?s=<股票名称>&f=<数据列选项>
+//
+//	参数
+//
+//	s –表示股票名称，多个股票之间使用英文加号分隔，如”XOM+BBDb.TO+JNJ+MSFT”，罗列了四个公司的股票：XOM,BBDb.TO, JNJ, MSFT。
+//
+//	f – 表示返回数据列，如”snd1l1yr”。更详细的参见雅虎股票 API f参数对照表。
+//
+//			2、通过API获取历史数据
+//
+//			请求地址
+//
+//	http://ichart.yahoo.com/table.csv?s=<string>&a=<int>&b=<int>&c=<int>&d=<int>&e=<int>&f=<int>&g=d&ignore=.csv
 //
 //		s — 股票名称
 //
@@ -36,13 +56,45 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 //		Ø  参数g的取值范围：d->‘日’(day), w->‘周’(week)，m->‘月’(mouth)，v->‘dividends only’
 //
 //		Ø  月份是从0开始的，如9月数据，则写为08。
+//	一定注意月份参数，其值比真实数据-1。如需要9月数据，则写为08。
+
 //	http://heipark.iteye.com/blog/1423812
-	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >${code}.sz<#else>${code}.SS</#if>";
-	protected String get(String code) throws Exception {
-			String url = FreeMarkerUtils.convert(URL, "code", code);
-		logger.info(url);
-			return getResponse(url);
+//	private final static String URL = "http://table.finance.yahoo.com/table.csv?s=<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >${code}.sz<#else>${code}.SS</#if>";
+
+	private final static String URL_TEMP = "http://table.finance.yahoo.com/table.csv?s=${code}&a=${startMonth}&b=${startDay}&c=${startYear}&d=${toMonth}&e=${toDay}&f=${toYear}&g=d&ignore=.csv";
+
+	private String parseCode(String code){
+		if(code.startsWith("0") || code.startsWith("3")){
+			return code +".sz";
 		}
+		else{
+			return code +".SS";
+		}
+	}
+	protected String get(String code, String start,String end) throws Exception {
+//			String url = FreeMarkerUtils.convert(URL, "code", code);
+
+		String mCode = parseCode(code);
+		String startYear = start.substring(0,4);
+		String startMonth = (Integer.valueOf(start.substring(5, 7))-1)+"";
+		String startDay = start.substring(8, 10);
+
+		String toYear = end.substring(0,4);
+		String toMonth = (Integer.valueOf(end.substring(5, 7))-1)+"";
+		String toDay = end.substring(8, 10);
+
+		String url = replaceValue(URL_TEMP, "code", mCode);
+		url = replaceValue(url, "startYear", startYear);
+		url = replaceValue(url, "startMonth", startMonth);
+		url = replaceValue(url, "startDay", startDay);
+
+		url = replaceValue(url, "toYear", toYear);
+		url = replaceValue(url, "toMonth", toMonth);
+		url = replaceValue(url, "toDay", toDay);
+
+		logger.info(url);
+		return getResponse(url);
+	}
 
 		public List<Map<String,String>> parse(String dataStr) {
 			Vector<Map<String,String>> v = new Vector<>();
@@ -77,16 +129,31 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 //			});
 			return v;
 		}
-
-
+	private static final SimpleDateFormat  f  = new SimpleDateFormat("yyyy-MM-dd");
+	private String startDate;
+	private String toDate;
 	public YahooHistoryLoader(String code) {
 		this.code = code;
+		this.startDate = "1990-01-01";
+		this.toDate = f.format(new Date());
 	}
-	
+
+	public YahooHistoryLoader(String code, String startDate, String toDate) {
+		this.code = code;
+		this.startDate = startDate;
+		this.toDate = toDate;
+	}
+
+	public YahooHistoryLoader(String code, String startDate) {
+		this.code = code;
+		this.startDate = startDate;
+		this.toDate = f.format(new Date());
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String,String>>  execute() throws Exception {
-		String data = get(code);
+		String data = get(code, startDate, toDate);
 		if(data!=null) {
 			return parse(data);
 		}

@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import sam.bee.stock.loader.BasicTest;
-import sam.bee.stock.loader.ILoaderAPI;
+
 
 public class GetRealTimeStockTest extends BasicTest {
 
@@ -21,9 +21,10 @@ public class GetRealTimeStockTest extends BasicTest {
 	@Test
 	public void test() throws Exception {
 		
-		ILoaderAPI api = new LoaderApiImpl();
+
 		String code = "";
-		List<Map<String, String>> stockList = api.getRealTimeStockList(code);
+
+		List<Map<String, String>> stockList = new 	QQRealTimLoader(code).execute();
 
 
 	}

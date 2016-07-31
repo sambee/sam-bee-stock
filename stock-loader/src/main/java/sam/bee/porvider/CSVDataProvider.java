@@ -132,6 +132,47 @@ public class CSVDataProvider implements IDataProvider{
 
     }
 
+    @Override
+    public List<Map<String, String>> getList(int day, String... keys) throws Exception {
+
+        List<Map<String,String>> l = new LinkedList<>();
+        File file = new File(base, join(File.separator,keys));
+        InputStreamReader in = null;
+
+        try {
+            if(!file.exists()){
+                System.err.println("Not found the file." + file.getCanonicalPath());
+                return l;
+            }
+            in=new InputStreamReader(new FileInputStream(file), "UTF-8");
+
+            BufferedReader br = new BufferedReader(in);
+            String line = null;
+            int i = 0;
+            String[] header = new String[0];
+            String[] values;
+            Map m;
+            while ((line = br.readLine()) != null && i<day) {
+                if (i == 0) {
+                    header = line.split(",");
+                } else {
+                    values = line.split(",");
+                    m = new LinkedHashMap();
+                    for (int no = 0; no < values.length; no++) {
+                        m.put(header[no], values[no]);
+                    }
+                    l.add(m);
+                }
+                i++;
+            }
+        }
+        finally {
+            if(in!=null){
+                in.close();
+            }
+        }
+        return l;
+    }
 
 
     @Override

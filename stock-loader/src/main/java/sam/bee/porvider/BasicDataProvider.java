@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class BasicDataProvider implements IDataProvider {
+public abstract class BasicDataProvider implements IDataProvider {
 	
 	/**
 	 * 

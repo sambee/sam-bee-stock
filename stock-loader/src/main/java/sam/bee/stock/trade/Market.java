@@ -30,7 +30,7 @@ public class Market extends Observable  {
     public static final String TRADE_DATE_CODE = "601398";
     List<Map<String,String>> allStockInfos = new LinkedList<Map<String, String>>();
 
-    private boolean isTrade(){
+    private boolean isTradeDate(){
         return tradeDate.contains(currentDate);
     }
 
@@ -202,7 +202,7 @@ public class Market extends Observable  {
                 if (iDate > icDate) {
                     break;
                 }
-                String vol = (String)m.get(VOLUME);
+                String vol = m.get(VOLUME);
                 if(vol!=null && !("000").equals(vol)){
                     ret.add(m);
                 }

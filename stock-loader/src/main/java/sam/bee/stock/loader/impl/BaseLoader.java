@@ -98,4 +98,11 @@ public abstract class BaseLoader {
 		}
 		return null;
 	}
+
+	protected String replaceValue(String temp, String key, String value){
+		if(value == null){
+			value = "";
+		}
+		return temp.replaceAll("\\$\\{" + key+ "\\}", value);
+	}
 }

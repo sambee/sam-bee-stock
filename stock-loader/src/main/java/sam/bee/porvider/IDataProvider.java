@@ -36,7 +36,16 @@ public interface IDataProvider {
 	 * @throws Exception
 	 */
 	List<Map<String,String>> getList(String... key) throws Exception;
-	
+
+	/**
+	 * near by date.
+	 * @param day
+	 * @param key
+	 * @return
+	 * @throws Exception
+     */
+	List<Map<String,String>> getList(int day, String... key) throws Exception;
+
 	/**
 	 * 
 	 * @param key

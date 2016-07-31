@@ -3,7 +3,6 @@ package sam.bee.stock.loader.impl;
 import org.junit.Test;
 import sam.bee.porvider.CSVDataProvider;
 import sam.bee.stock.loader.BasicTest;
-import sam.bee.stock.loader.ILoaderAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +17,9 @@ public class GetShangHaiAndShenZhenStockListTest extends BasicTest {
 	@Test
 	public void test() throws Exception {
 		
-		ILoaderAPI api = new LoaderApiImpl();
+
 		List<Map<String,String>> all = new ArrayList<Map<String,String>>();
-		List<Map<String,String>> list =  api.getAllStockInfoList();
+		List<Map<String,String>> list =  new GetAllStockInfoList().load();
 
 		for(Map<String,String> stock : list){
 			stock.put("STOCK_TYPE", "ss");

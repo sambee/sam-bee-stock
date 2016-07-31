@@ -131,6 +131,15 @@ public class FileDataProvider extends BasicDataProvider {
 		return JsonHelper.toList( new JSONArray(json));
 	}
 
+	@Override
+	public List<Map<String, String>> getList(int day, String... key) throws Exception {
+		String json = getString(key);
+		if(json==null){
+			return null;
+		}
+		return JsonHelper.toList( new JSONArray(json));
+	}
+
 
 	@SuppressWarnings("resource")
 	public static String readFile(File file, String charset) throws IOException{

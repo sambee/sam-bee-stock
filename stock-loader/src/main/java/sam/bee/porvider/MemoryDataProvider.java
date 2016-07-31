@@ -104,6 +104,11 @@ public class MemoryDataProvider  extends BasicDataProvider {
         return JsonHelper.toList( new JSONArray(json));
     }
 
+    @Override
+    public List<Map<String, String>> getList(int day, String... key) throws Exception {
+        return null;
+    }
+
 
     @SuppressWarnings("resource")
     public static String readFile(File file, String charset) throws IOException{
