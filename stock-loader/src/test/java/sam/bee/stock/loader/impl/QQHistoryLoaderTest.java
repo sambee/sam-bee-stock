@@ -21,7 +21,7 @@ public class QQHistoryLoaderTest extends BasicTest {
         Market m = new Market();
         Map data = m.getStockInfo(code);
         String name = (String) data.get(STOCK_NAME);
-        List l = (List) new QQHistoryLoader().execute(code);
+        List l = (List) new QQHistoryLoader(640).execute(code);
         getDataProvider().setList(l, HISTORY, code+"-"+name);
         System.out.println(l);
     }

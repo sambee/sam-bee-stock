@@ -3,7 +3,6 @@ package sam.bee.stock.loader.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sam.bee.porvider.JsonHelper;
-import sam.bee.stock.loader.util.FreeMarkerUtils;
 
 import java.util.*;
 
@@ -14,24 +13,44 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
 
     protected static final Logger logger = LoggerFactory.getLogger(QQHistoryLoader.class);
 
-
-    String mCode;
     //public  String URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayhfq&param=sh600103,day,1998-01-01,1998-12-31,320,hfq&r=0.444157593883574";
-    public String URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq&param=${code},day,,,640,qfq&r=0.48481834312513383";
-    public String CODE_TEMP = "<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >sz${code}<#else>sh${code}</#if>";
+    public String URL = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=kline_dayqfq&param=${code},day,,,${day},qfq&r=0.48481834312513383";
+  //  public String CODE_TEMP = "<#if code?starts_with(\"0\")  || code?starts_with(\"3\")  >sz${code}<#else>sh${code}</#if>";
 
-    protected String  get(String code) throws Exception {
-        mCode = FreeMarkerUtils.convert(CODE_TEMP, "code",code);
-        String url = FreeMarkerUtils.convert(URL, "code", mCode);
-        return getResponse(url);
+
+    private class Result {
+        public String data;
+        public String sCode;
+    }
+    private String parseCode(String code){
+        if(code.startsWith("0") || code.startsWith("3")){
+            return "sz"+code ;
+        }
+        else{
+            return "sh"+code;
+        }
     }
 
-    public List<Map<String,String>> parse(String dataStr) {
-        String json = dataStr;
+    protected Result get(String code, String day) throws Exception {
+        Result ret = new Result();
+        String temp = replaceValue(URL, "day", day);
+        String sCode=parseCode(code);
+        ret.sCode =sCode;
+
+        temp = replaceValue(temp, "code", sCode);
+       // mCode = FreeMarkerUtils.convert(CODE_TEMP, "code",code);
+       // String url = FreeMarkerUtils.convert(URL, "code", mCode);
+        logger.info(temp);
+        ret.data = getResponse(temp);
+        return ret;
+    }
+
+    public List<Map<String,String>> parse(Result ret) {
+        String json = ret.data;
         json = json.substring(json.indexOf("{"));
         Map m = JsonHelper.toMap(json);
         Map data= (Map) m.get("data");
-        Map l = (Map) data.get(mCode);
+        Map l = (Map) data.get(ret.sCode);
         List ll = (List) l.get("qfqday");
         Vector<Map<String,String>> v = new Vector<>();
         for(int i=0;i<ll.size();i++){
@@ -64,20 +83,28 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
         return m;
     }
 
+    private int day = 640;
+    public QQHistoryLoader(int day){
+        this.day = day;
+    }
+
     public QQHistoryLoader(){
-        throw new RuntimeException("wrong data for web.ifzq.gtimg.cn");
+        this.day = 640;
+    }
+
+    public QQHistoryLoader(String startDate, String toDate){
+        throw new RuntimeException("Not yet implements");
     }
 
     @Override
     public List<Map<String,String>>  execute(String code) throws Exception {
-        String dataStr = get(code);
-        logger.info(dataStr);
-        return parse(dataStr);
+        Result ret = get(code, day+"");
+        return parse(ret);
 
     }
 
     public static void main(String[] args) throws Exception {
-        List l = (List) new QQHistoryLoader().execute("600103");
+        List l = (List) new QQHistoryLoader(640).execute("600103");
         System.out.println(l);
 
     }
