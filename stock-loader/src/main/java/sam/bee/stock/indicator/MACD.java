@@ -3,6 +3,8 @@ package sam.bee.stock.indicator;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import static sam.bee.stock.indicator.Math.getNumber;
+
 /**
  * Created by Administrator on 2016/7/10.
  */
@@ -64,11 +66,7 @@ public class MACD {
     private static int length = 36;
     private static double multiplier;
 
-    public static double getNumber(double number){
-        DecimalFormat df = new DecimalFormat("#.####");
-        double f=Double.valueOf(df.format(number));
-        return f;
-    }
+
 
 
     public static boolean cross(List<Map> macd){
