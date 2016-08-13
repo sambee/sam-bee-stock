@@ -142,7 +142,7 @@ public class Market extends Observable  {
             notifyObservers(currentDate);
         }
         else{
-            logger.info(currentDate + "---- 非交易日 ------");
+            logger.info( String.format("%12s 非交易日",currentDate));
         }
         return currentDate;
     }
