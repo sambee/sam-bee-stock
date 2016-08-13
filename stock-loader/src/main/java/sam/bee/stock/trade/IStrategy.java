@@ -11,5 +11,5 @@ public interface IStrategy {
     public final static int SELL =2;
     void setMarket(Market market);
     void setAgent(Agent agent);
-    List<Decision> execute(Object content) throws Exception;
+    List<Decision> execute(String date) throws Exception;
 }

@@ -16,7 +16,7 @@ public class Agent implements Observer{
         String date = (String)arg;
         if(strategy!=null){
             try {
-                strategy.execute(arg);
+                strategy.execute(date);
             } catch (Exception e) {
                 e.printStackTrace();
             }
