@@ -112,20 +112,22 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 				}
 				v.add(map);
 			}
-//			Collections.sort(v, new Comparator<Map<String, String>>() {
-//
-//				@Override
-//				public int compare(Map<String, String> o1, Map<String, String> o2) {
-//					String code1 = o1.get("DATE");
-//					String code2 = o2.get("DATE");
-//					if(code1!=null && code2!=null) {
-//						return code1.compareTo(code2);
-//					}
-//					logger.error(o1 + " "+ o2);
-//					throw new NullPointerException("Not found date");
-//				}
-//
-//			});
+			if(v!=null) {
+				Collections.sort(v, new Comparator<Map<String, String>>() {
+
+					@Override
+					public int compare(Map<String, String> o1, Map<String, String> o2) {
+						String code1 = o1.get("DATE");
+						String code2 = o2.get("DATE");
+						if (code1 != null && code2 != null) {
+							return code1.compareTo(code2);
+						}
+						logger.error(o1 + " " + o2);
+						throw new NullPointerException("Not found date");
+					}
+
+				});
+			}
 			return v;
 		}
 	private static final SimpleDateFormat  f  = new SimpleDateFormat("yyyy-MM-dd");
