@@ -2,6 +2,7 @@ package sam.bee.stock.loader.impl;
 
 import org.junit.Test;
 import sam.bee.stock.loader.BasicTest;
+import sam.bee.stock.loader.StockLoaderFactory;
 import sam.bee.stock.trade.Market;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class QQHistoryLoaderTest extends BasicTest {
         Market m = new Market();
         Map data = m.getStockInfo(code);
         String name = (String) data.get(STOCK_NAME);
-        List l = (List) new QQHistoryLoader(640).execute(code);
+        List l = (List) StockLoaderFactory.getInst().getHistory(code);
         getDataProvider().setList(l, HISTORY, code+"-"+name);
         System.out.println(l);
     }

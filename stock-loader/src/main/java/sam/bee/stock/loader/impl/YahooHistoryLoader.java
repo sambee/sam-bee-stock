@@ -153,7 +153,7 @@ public class YahooHistoryLoader extends BaseLoader implements ILoader {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String,String>>  execute(String code) throws Exception {
+	public List<Map<String,String>>  execute(String code, String type) throws Exception {
 		String data = get(code, startDate, toDate);
 		if(data!=null) {
 			return parse(data);

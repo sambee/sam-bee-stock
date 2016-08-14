@@ -32,7 +32,7 @@ public class QQRealTimeDataQueryTest {
 
 		for(String code : codeList) {
 			QQRealTimLoader stockQuery = new QQRealTimLoader();
-			List<Map<String, String>> list = (List<Map<String, String>>) stockQuery.execute(code);
+			List<Map<String, String>> list = (List<Map<String, String>>) stockQuery.execute(code, "sz");
 
 
 			System.out.println(String.format("%6sCode|%6s名字|　当前价格|成交量(手)|   　 今开|    总市值", "", ""));

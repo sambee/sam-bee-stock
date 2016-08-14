@@ -97,14 +97,14 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
     }
 
     @Override
-    public List<Map<String,String>>  execute(String code) throws Exception {
+    public List<Map<String,String>>  execute(String code, String type) throws Exception {
         Result ret = get(code, day+"");
         return parse(ret);
 
     }
 
     public static void main(String[] args) throws Exception {
-        List l = (List) new QQHistoryLoader(640).execute("600103");
+        List l = (List) new QQHistoryLoader(640).execute("600103", "sh");
         System.out.println(l);
 
     }

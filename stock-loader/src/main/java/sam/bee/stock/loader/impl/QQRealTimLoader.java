@@ -5,6 +5,8 @@ import sam.bee.stock.loader.util.FreeMarkerUtils;
 import java.util.*;
 
 import static sam.bee.stock.Const.DATE;
+import static sam.bee.stock.Const.STOCK_CODE;
+import static sam.bee.stock.Const.STOCK_TYPE;
 
 /**
  * QQSimpleStockInfoLoader.java
@@ -142,23 +144,22 @@ public class QQRealTimLoader extends BaseLoader implements ILoader {
     }
 
     //private final static String URL_TEMPLATE = "http://qt.gtimg.cn/r=0.7938921226847172q=<#list list as l><#if l?starts_with(\"0\") >s_sz${l}<#else>s_sh${l}</#if></#list>";
-    private final static String URL_TEMPLATE = "http://qt.gtimg.cn/r=0.7938921226847172q=<#list list as l><#if l?starts_with(\"0\") >sz${l}<#else>sh${l}</#if>,</#list>";
+    private final static String URL_TEMPLATE = "http://qt.gtimg.cn/r=0.7938921226847172q=${STOCK_TYPE}${STOCK_CODE},";
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public String get(String code) throws Exception {
-        Vector<String> codes = new Vector();
-        codes.add(code);
+    public String get(String code, String type) throws Exception {
         Map root = new HashMap();
-        root.put("list", codes);
+        root.put(STOCK_CODE, code);
+        root.put(STOCK_TYPE, type);
         String request = FreeMarkerUtils.convert(URL_TEMPLATE, root);
         //logger.debug(request);
         return getResponse(request);
     }
 
     @SuppressWarnings("unchecked")
-    public List<Map<String, String>> execute(String code) throws Exception {
+    public List<Map<String, String>> execute(String code, String type) throws Exception {
         {
-            String str = get(code);
+            String str = get(code, type);
             return parse(str);
         }
 

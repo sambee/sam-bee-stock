@@ -93,7 +93,7 @@ public class GetStockHistoryTest extends BasicTest {
 			List<Map<String, String>> list;
 			try {
 				//log.info("Load stock:" +  stockCode);
-				list = new YahooHistoryLoader().execute(code);
+				list = new YahooHistoryLoader().execute(code, "sz");
 				Collections.sort(list, new  Comparator<Map<String,String>>(){
 
 					@Override

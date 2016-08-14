@@ -14,7 +14,7 @@ public class YahooHistoryLoaderTest {
 	@Test
 	public void test() throws Exception {
 		String code = "600000";
-		List<Map<String,String>> list = new YahooHistoryLoader("2016-01-01", "2016-07-31").execute(code);
+		List<Map<String,String>> list = new YahooHistoryLoader("2016-01-01", "2016-07-31").execute(code, "sz");
 
 			Collections.sort(list, new Comparator<Map<String, String>>() {
 

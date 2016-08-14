@@ -82,7 +82,7 @@ public class YahooRealTimeLoader extends BaseLoader implements ILoader{
 	}
 
 	@Override
-	public List<Map<String, String>> execute(String code) throws Exception {
+	public List<Map<String, String>> execute(String code, String type) throws Exception {
 		String mCode = parseCode(code);
 		String url = replaceValue(URL, "code", mCode);
 		String dataStr = getResponse(url);

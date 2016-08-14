@@ -1,6 +1,7 @@
 package sam.bee.stock.loader.impl;
 
 import org.junit.Test;
+import sam.bee.stock.loader.StockLoaderFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,8 @@ public class YahooRealTimeLoaderTest {
 
     @Test
     public void test() throws Exception {
-        YahooRealTimeLoader loader =  new YahooRealTimeLoader();
-        List<Map<String,String>> data = loader.execute("600397");
+
+        List<Map<String,String>> data = StockLoaderFactory.getInst().getHistory("600397");
         System.out.println(data);
 
     }

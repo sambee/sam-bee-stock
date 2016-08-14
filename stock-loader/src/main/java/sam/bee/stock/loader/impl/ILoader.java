@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface ILoader {
 	
-	List<Map<String,String>> execute(String code)throws Exception;
+	List<Map<String,String>> execute(String code, String type)throws Exception;
 
 }

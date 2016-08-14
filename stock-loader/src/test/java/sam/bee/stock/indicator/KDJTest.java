@@ -24,7 +24,7 @@ public class KDJTest extends BasicTest {
     public void test() throws Exception {
         String code = "601198";
         String name = "东兴证券";
-        List<Map<String, String>>  mapList = new QQHistoryLoader().execute(code);
+        List<Map<String, String>>  mapList = new QQHistoryLoader().execute(code, "sz");
 
         Collections.sort(mapList, new Comparator<Map<String, String>>() {
             @Override
