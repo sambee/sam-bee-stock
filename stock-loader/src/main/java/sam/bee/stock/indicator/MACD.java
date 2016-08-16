@@ -57,6 +57,8 @@ public class MACD {
             diffList.add(dif);
         }
         dea = expma(diffList, midPeriod);
+        macdData.put("SHORT_EMA", getNumber(shortEMA));
+        macdData.put("LONG_EMA", getNumber(longEMA));
         macdData.put("DIF", getNumber(dif));
         macdData.put("DEA", getNumber(dea));
         macdData.put("MACD",getNumber ((dif - dea) * 2));

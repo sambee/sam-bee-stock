@@ -76,4 +76,18 @@ public class Decision {
     public void setContent(String content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return "Decision{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", buyOrSell=" + buyOrSell +
+                ", price=" + price +
+                ", unit=" + unit +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
