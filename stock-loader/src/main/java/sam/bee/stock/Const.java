@@ -25,4 +25,10 @@ public class Const {
     public final static String DATE = "DATE";
     public final static int BUY = -1;
     public final static int SELL = 1;
+    public final static String DIVIDEND = "DIVIDEND";
+    public final static String DIVIDEND_DATE = "DIVIDEND_DATE";
+    public final static String DIVIDEND_RECORD_DATE = "DIVIDEND_RECORD_DATE";
+    public final static String EX_DIVIDEND_DATE = "EX_DIVIDEND_DATE";
+    public final static String DIVIDEND_RATE = "RATE";
+
 }

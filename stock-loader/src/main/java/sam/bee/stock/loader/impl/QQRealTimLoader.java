@@ -1,12 +1,11 @@
 package sam.bee.stock.loader.impl;
 
-import sam.bee.stock.loader.util.FreeMarkerUtils;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
-import java.util.*;
-
-import static sam.bee.stock.Const.DATE;
-import static sam.bee.stock.Const.STOCK_CODE;
-import static sam.bee.stock.Const.STOCK_TYPE;
+import static sam.bee.stock.Const.*;
 
 /**
  * QQSimpleStockInfoLoader.java
@@ -148,12 +147,14 @@ public class QQRealTimLoader extends BaseLoader implements ILoader {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public String get(String code, String type) throws Exception {
-        Map root = new HashMap();
-        root.put(STOCK_CODE, code);
-        root.put(STOCK_TYPE, type);
-        String request = FreeMarkerUtils.convert(URL_TEMPLATE, root);
+//        Map root = new HashMap();
+//        root.put(STOCK_CODE, code);
+//        root.put(STOCK_TYPE, type);
+        //String request = FreeMarkerUtils.convert(URL_TEMPLATE, root);
+        String temp = replaceValue(URL_TEMPLATE, STOCK_CODE, code);
+        temp =  replaceValue(temp, STOCK_TYPE, type);
         //logger.debug(request);
-        return getResponse(request);
+        return getResponse(temp);
     }
 
     @SuppressWarnings("unchecked")
