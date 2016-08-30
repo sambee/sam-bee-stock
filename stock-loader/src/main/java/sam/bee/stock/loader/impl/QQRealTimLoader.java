@@ -63,29 +63,29 @@ public class QQRealTimLoader extends BaseLoader implements ILoader {
             "STOCK_PRICE",        //	 3: 当前价格
             "PREVIOUS_CLOSE",            //	 4: 昨收
             "OPEN",            //	 5: 今开
-            "VOLUMN",    //	 6: 成交量（手）
+            "VOLUME",    //	 6: 成交量（手）
             "外盘",            //	 7: 外盘
             "内盘",            //	 8: 内盘
             "BUY1_PRICE",            //	 9: 买一
-            "BUY1_VOLUMN",    //	10: 买一量（手）
+            "BUY1_VOLUME",    //	10: 买一量（手）
             "BUY2_PRICE",            //	11
-            "BUY2_VOLUMN",    //	12
+            "BUY2_VOLUME",    //	12
             "BUY3_PRICE",            //	13
-            "BUY3_VOLUMN",        //	14
+            "BUY3_VOLUME",        //	14
             "BUY4_PRICE",            //	15
-            "BUY4_VOLUMN",    //	16
+            "BUY4_VOLUME",    //	16
             "BUY5_PRICE",            //	17
-            "BUY5_VOLUMN", //18: 买五
+            "BUY5_VOLUME", //18: 买五
             "SELL1_PRICE",    //	19: 卖一
-            "SELL1_VOLUMN",    //	20: 卖一量
+            "SELL1_VOLUME",    //	20: 卖一量
             "SELL2_PRICE",    //	21: 卖二 卖五
-            "SELL2_VOLUMN",    //	22: 卖二 卖五
+            "SELL2_VOLUME",    //	22: 卖二 卖五
             "SELL3_PRICE",    //	23: 卖二 卖五
-            "SELL3_VOLUMN",    //	24: 卖二 卖五
+            "SELL3_VOLUME",    //	24: 卖二 卖五
             "SELL4_PRICE",    //	25: 卖二 卖五
-            "SELL4_VOLUMN",    //	26: 卖二 卖五
+            "SELL4_VOLUME",    //	26: 卖二 卖五
             "SELL5_PRICE",    //	27: 卖二 卖五
-            "SELL5_VOLUMN",    //	28: 卖二 卖五
+            "SELL5_VOLUME",    //	28: 卖二 卖五
             "最近逐笔成交",    //	29: 最近逐笔成交
             "CREATED_TIME",    //	30: 时间
             "CHANGE",    //	31: 涨跌
