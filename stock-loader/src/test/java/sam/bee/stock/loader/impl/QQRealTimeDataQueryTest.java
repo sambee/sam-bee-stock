@@ -19,7 +19,7 @@ public class QQRealTimeDataQueryTest {
 	@Test
 	public void test() throws Exception {
 
-		String temp = "${STOCK_CODE}|${STOCK_NAME}|${BUY1_PRICE}|${BUY1_VOLUMN}|${OPEN}|${总市值}";
+		String temp = "${STOCK_CODE}|${STOCK_NAME}|${BUY1_PRICE}|${BUY1_VOLUME}|${OPEN}|${总市值}";
 
 		//股票代号列表
 		List<String> codeList = new ArrayList<String>();

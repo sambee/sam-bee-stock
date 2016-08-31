@@ -49,25 +49,30 @@ public class QQHistoryLoader extends BaseLoader implements ILoader {
         String json = ret.data;
         json = json.substring(json.indexOf("{"));
         Map m = JsonHelper.toMap(json);
-        Map data= (Map) m.get("data");
-        Map l = (Map) data.get(ret.sCode);
-        List ll = (List) l.get("qfqday");
-        Vector<Map<String,String>> v = new Vector<>();
-        for(int i=0;i<ll.size();i++){
-            List dat = (List) ll.get(i);
-            v.add(m((String)dat.get(0), (String)dat.get(1), (String)dat.get(2), (String)dat.get(3), (String)dat.get(4), (String)dat.get(5)));
-        }
-        Collections.sort(v, new Comparator<Map<String, String>>() {
+        Object obj = m.get("data");
 
-            @Override
-            public int compare(Map<String, String> o1, Map<String, String> o2) {
-                String code1 = o1.get("DATE");
-                String code2 = o2.get("DATE");
-                return code1.compareTo(code2);
+        if(obj instanceof Map) {
+            Map data = (Map) obj;
+            Map l = (Map) data.get(ret.sCode);
+            List ll = (List) l.get("qfqday");
+            Vector<Map<String, String>> v = new Vector<>();
+            for (int i = 0; i < ll.size(); i++) {
+                List dat = (List) ll.get(i);
+                v.add(m((String) dat.get(0), (String) dat.get(1), (String) dat.get(2), (String) dat.get(3), (String) dat.get(4), (String) dat.get(5)));
             }
+            Collections.sort(v, new Comparator<Map<String, String>>() {
 
-        });
-        return v;
+                @Override
+                public int compare(Map<String, String> o1, Map<String, String> o2) {
+                    String code1 = o1.get("DATE");
+                    String code2 = o2.get("DATE");
+                    return code1.compareTo(code2);
+                }
+
+            });
+            return v;
+        }
+        return null;
     }
 
 

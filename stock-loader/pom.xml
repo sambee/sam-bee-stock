@@ -189,17 +189,34 @@
 
 	<repositories>
 		<repository>
-			<id>CN</id>
-			<name>OSChina Central</name>
-			<url>http://maven.oschina.net/content/groups/public</url>
+			<id>centra1</id>
+			<name>centra1</name>
+			<url>http://repo1.maven.org/maven2</url>
 		</repository>
 		<repository>
+			<id>centra2</id>
+			<name>centra2</name>
+			<url>http://repo2.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>jboss</id>
+			<name>jboss</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
+
+
+	<!--
+
+			<repository>
 			<id>central</id>
 			<name>central</name>
 			<url>http://central.maven.org/maven2</url>
 		</repository>
-
-	<!--
+			<repository>
+			<id>CN</id>
+			<name>OSChina Central</name>
+			<url>http://maven.oschina.net/content/groups/public</url>
+		</repository>
 		<repository>
 			<id>my-repo1</id>
 			<name>your custom repo</name>
