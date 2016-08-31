@@ -138,6 +138,7 @@ public class QQRealTimLoader extends BaseLoader implements ILoader {
         }
         String date =  createdTime.substring(0,4)+"-"+createdTime.substring(4,6)+"-"+createdTime.substring(6,8);
         map.put(DATE, date);
+        map.put(CLOSE, map.get(STOCK_PRICE));
         ret.add(map);
         return ret;
     }
